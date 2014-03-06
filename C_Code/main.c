@@ -10,13 +10,13 @@
 
 #if !defined(BATCH_SIZE)
 //#define BATCH_SIZE (30)
-#define BATCH_SIZE (30)
+#define BATCH_SIZE (1)
 #endif
 
 //#if INPUT_SIZE == INPUT_SIZE_SMALL
 #define M 640  /* columns */
 #define N 480  /* rows */
-#define FILENAME "input_small.mat"
+#define FILENAME "input_atomant.mat"
 //#define FILENAME "../../input/input_small.mat"
 #define SIZE "small"
 
@@ -43,7 +43,7 @@ int main (int argc, char * argv[])
   int * frame;
   int * output;
   int * histogram;
-  int nBins = (1 << 16);
+  int nBins = (1 << 8);
   int i;
 
   srand (time (NULL));
@@ -78,8 +78,8 @@ int main (int argc, char * argv[])
   /* Perform the histogram equalization */
   tic ();
   for (i = 0; i < BATCH_SIZE; i++) {
-    hist (&frame[i * M * N], &histogram[i * nBins], N, M, 16);
-    histEq (&frame[i * M * N], &output[i * M * N], &histogram[i * nBins], N, M, 16, 16);
+    hist (&frame[i * M * N], &histogram[i * nBins], N, M, 8);
+    histEq (&frame[i * M * N], &output[i * M * N], &histogram[i * nBins], N, M, 8, 8);
   }
   PRINT_STAT_DOUBLE ("time_histogram_equalization", toc ());
 

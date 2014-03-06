@@ -96,8 +96,11 @@ histEq (algPixel_t *streamA, algPixel_t *out, int *h, int nRows, int nCols, int 
 
   for (i = 0; i < nInpBins; i++)
   {
-    CDFmin = MIN(CDFmin, CDF[i]);
+	if (CDF[i] != 0) {
+		CDFmin = MIN(CDFmin, CDF[i]);
+	}
   }
+  //printf("\nThe minimum CDFmin: %lf\n",CDFmin);
 
   for (i = 0; i < nInpBins; i++)
   {
