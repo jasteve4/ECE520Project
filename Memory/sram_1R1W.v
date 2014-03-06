@@ -10,7 +10,7 @@
 *   2/4/13   Wenxu Zhao    Version 1.0
 *   9/1/14   Sumon Dey	   Version 1.0
 *   3/3/15   Sumon Dey     Version 1.1
-*M*/
+*/
 module sram_1R1W (clock, WE, WriteAddress, ReadAddress, WriteBus, ReadBus);
 input  clock, WE; 
 input  [15:0] WriteAddress, ReadAddress; 
