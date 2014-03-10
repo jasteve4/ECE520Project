@@ -19,7 +19,7 @@ integer i;
 always #5 clock = ~clock;
 
 initial begin
-  $monitor("WriteBus: %h, ReadVal: %d", WriteBus2, WriteAddress2);
+  $monitor("WriteBus: %h, ReadVal: %h, Done: %d", WriteBus2, WriteAddress2, done);
   
   clock = 0;
   start = 0;
@@ -29,9 +29,10 @@ initial begin
   #30
   start = 1;
   rst_n = 1;
-  #5000
+  #10000
   $writememh("./output/outputM1.txt",m1.Register);
   $writememh("./output/outputM2.txt",m2.Register);
+  $display("DONE: %d", done);
   $finish;
 end
 
