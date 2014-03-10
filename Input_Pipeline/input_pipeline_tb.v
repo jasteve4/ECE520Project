@@ -19,15 +19,17 @@ integer i;
 always #5 clock = ~clock;
 
 initial begin
+  $monitor("WriteBus: %h, ReadVal: %d", WriteBus2, WriteAddress2);
+  
   clock = 0;
   start = 0;
   rst_n = 0;
+  $readmemh("input_wiki.txt",m1.Register);
+  
   #30
   start = 1;
   rst_n = 1;
-
-  $readmemh("input_wiki.txt",m1.Register);
-  #500
+  #5000
   $writememh("./output/outputM1.txt",m1.Register);
   $writememh("./output/outputM2.txt",m2.Register);
   $finish;

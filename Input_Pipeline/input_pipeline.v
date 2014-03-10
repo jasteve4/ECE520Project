@@ -29,14 +29,13 @@ reg memoryCounter;
 
 //pipeline registers
 reg [7:0] readVal_FI, readVal_FS, readVal_Accum;
-reg [7:0] scratchVal_FS, scratchVal_Accum;
+reg [15:0] scratchVal_FS, scratchVal_Accum;
 
 
 always@(rst_n or pipelineCounter or memoryCounter) begin
   if(!rst_n) begin
-    for(i=0;i<255;i=i+1) begin  //initialize the scratchpad to 0
-      m2WriteAddr <= 0;
-    end
+      
+    
   end else begin
     //===============Fetch Initial(FI) Stage=========================
     m1ReadAddr <= memoryCounter;
@@ -49,7 +48,11 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     if(readVal_FI == readVal_Accum) begin
       scratchVal_FS <= scratchVal_Accum;
     end else begin
-      scratchVal_FS <= (readVal_FI == m2ReadVal;
+      if(m2ReadVal[31:16] == 16'hAA) begin
+        scratchVal_FS <= m2ReadVal;
+      end else begin
+        scratchVal_FS <= 32'hAAAA0000;
+      end
     end
 
     //===============Accumulate Stage (Accum)========================
@@ -61,15 +64,15 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     end
     //===============Store ScratchPad (SS)===========================
     m2WriteAddr <= readVal_Accum;
-    m2WriteVal <= scratchVal_Accum;
+    m2WriteVal <= {16'hAAAA, scratchVal_Accum};
   end
 end
 
 always@(posedge clock or negedge rst_n) begin   
-  if(!rst_n) begin            //Synchronous Active Low Reset
+  if(!rst_n && !start) begin            //Synchronous Active Low Reset
     pipelineCounter <= 0;
     memoryCounter <= 0;
- end else begin if(start) begin
+  end else begin  
     if(pipelineCounter > 119) begin
       pipelineCounter <= 0;
       memoryCounter <= memoryCounter + 1;
@@ -77,7 +80,7 @@ always@(posedge clock or negedge rst_n) begin
       pipelineCounter <= pipelineCounter + 8;
       memoryCounter <= memoryCounter;
     end
-  end end
+  end
 end
 
 endmodule
