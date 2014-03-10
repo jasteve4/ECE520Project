@@ -30,16 +30,24 @@ reg memoryCounter;
 //pipeline registers
 reg [7:0] readVal_FI, readVal_FS, readVal_Accum;
 reg [15:0] scratchVal_FS, scratchVal_Accum;
+reg m2WE_FI, m2WE_SP;
 
 
 always@(rst_n or pipelineCounter or memoryCounter) begin
   if(!rst_n) begin
-      
-    
+      m1ReadAddr <= 0;
+      m2ReadAddr <= 0;
+      m2WriteAddr <= 0;
+      m2WriteVal <= 0;
+      readVal_FI <= 0;
+      readVal_FS <= 0;
+      readVal_Accum <= 0;
+      scratchVal_FS <= 0;
+      scratchVal_Accum <= 0;
   end else begin
     //===============Fetch Initial(FI) Stage=========================
     m1ReadAddr <= memoryCounter;
-    readVal_FI <= m1ReadVal[pipelineCounter+:8];
+    readVal_FI <= m1ReadVal[pipelineCounter+:4'd8];
     
     //===============Fetch ScatchPad(FS) Stage=======================
     readVal_FS <= readVal_FI;
@@ -48,7 +56,7 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     if(readVal_FI == readVal_Accum) begin
       scratchVal_FS <= scratchVal_Accum;
     end else begin
-      if(m2ReadVal[31:16] == 16'hAA) begin
+      if(m2ReadVal[31:16] == 16'hAAAA) begin
         scratchVal_FS <= m2ReadVal;
       end else begin
         scratchVal_FS <= 32'hAAAA0000;
@@ -58,9 +66,9 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     //===============Accumulate Stage (Accum)========================
     readVal_Accum <= readVal_FS;
     if(readVal_Accum == readVal_FS) begin
-      scratchVal_Accum <= scratchVal_Accum + 1; 
+      scratchVal_Accum <= scratchVal_Accum + 1'b1; 
     end else begin
-      scratchVal_Accum <= scratchVal_FS + 1;
+      scratchVal_Accum <= scratchVal_FS + 1'b1;
     end
     //===============Store ScratchPad (SS)===========================
     m2WriteAddr <= readVal_Accum;
@@ -70,16 +78,35 @@ end
 
 always@(posedge clock or negedge rst_n) begin   
   if(!rst_n && !start) begin            //Synchronous Active Low Reset
-    pipelineCounter <= 0;
-    memoryCounter <= 0;
-  end else begin  
-    if(pipelineCounter > 119) begin
-      pipelineCounter <= 0;
-      memoryCounter <= memoryCounter + 1;
+    pipelineCounter <= 1'b0;
+    memoryCounter <= 1'b0;
+  end else begin
+    if(pipelineCounter > 8'd119) begin
+      pipelineCounter <= 1'b0;
+      memoryCounter <= memoryCounter + 1'b1;
     end else begin
-      pipelineCounter <= pipelineCounter + 8;
-      memoryCounter <= memoryCounter;
+      if(memoryCounter < 15'd4) begin
+        pipelineCounter <= pipelineCounter + 4'd8;
+        memoryCounter <= memoryCounter;
+        done <= 1'b0;
+      end else begin
+        pipelineCounter <= pipelineCounter;
+        memoryCounter <= memoryCounter;
+        done <= 1'b1;
+      end
     end
+  end
+end
+
+always@(posedge clock or negedge rst_n) begin
+  if(!rst_n && !start) begin
+    m2WE_FI <= 1'b0;
+    m2WE_SP <= 1'b0;
+    m2WE <= 1'b0;
+  end else begin
+    m2WE_FI <= 1'b1;
+    m2WE_SP <= m2WE_FI;
+    m2WE <= m2WE_SP;
   end
 end
 
