@@ -11,7 +11,7 @@
 *   9/1/14   Sumon Dey	   Version 1.0
 *   3/3/15   Sumon Dey     Version 1.1
 */
-module sram_1R1W (clock, WE, WriteAddress, ReadAddress1, ReadAddress2, WriteBus, ReadBus1, ReadBus2);
+module sram_2R1W (clock, WE, WriteAddress, ReadAddress1, ReadAddress2, WriteBus, ReadBus1, ReadBus2);
 input  clock, WE; 
 input  [15:0] WriteAddress, ReadAddress1,ReadAddress2; 
 input  [127:0] WriteBus;
@@ -36,6 +36,6 @@ always@(posedge clock)
 always@(*) 
   begin 
     #2 ReadBus1  =  Register[ReadAddress1];
-    #2 ReadBus2  =  Register[ReadAddress2]; 
+     ReadBus2  =  Register[ReadAddress2]; 
   end
 endmodule
