@@ -93,7 +93,7 @@ always@(posedge clock or negedge rst_n) begin
     write_enable <= 1'b0;
   end else begin
     if(memoryCounter < 15'd4) begin
-      if(pipelineCounter < 8'd119) begin
+      if(pipelineCounter < 8'd120) begin
         pipelineCounter <= pipelineCounter + 4'd8;
         memoryCounter <= memoryCounter;
       end else begin
