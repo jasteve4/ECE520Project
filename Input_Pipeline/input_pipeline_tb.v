@@ -29,7 +29,7 @@ initial begin
   #30
   start = 1;
   rst_n = 1;
-  #10000
+  #1000
   $writememh("./output/outputM1.txt",m1.Register);
   $writememh("./output/outputM2.txt",m2.Register);
   $display("DONE: %d", done);
