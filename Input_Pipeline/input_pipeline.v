@@ -23,13 +23,13 @@ module input_pipeline(
   output reg done
 );
 
-integer i; //used to reset memory
-reg [7:0] pipelineCounter;
+reg [6:0] pipelineCounter;
 reg [15:0] memoryCounter;
 
 //pipeline registers
 reg [7:0] readVal_FI, readVal_FS, readVal_Accum;
-reg [15:0] scratchVal_FS, scratchVal_Accum;
+reg [15:0] scratchVal_FS;
+reg [31:0] scratchVal_Accum;
 reg m2WE_FI, m2WE_FS, m2WE_Accum, write_enable;
 
 //debuggig
@@ -52,10 +52,10 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     m1ReadAddr <= memoryCounter;
     readVal_FI <= m1ReadVal[pipelineCounter+:8'd8];
     m2WE_FI <= write_enable;
+    m2ReadAddr <= m1ReadVal[pipelineCounter+:8'd8];
 
     //===============Fetch ScatchPad(FS) Stage=======================
     readVal_FS <= readVal_FI;
-    m2ReadAddr <= readVal_FI;
     m2WE_FS <= m2WE_FI;
 
     if(readVal_FI == readVal_Accum) begin
@@ -75,13 +75,13 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     if(readVal_Accum == readVal_FS) begin
       scratchVal_Accum <= scratchVal_Accum + 1'b1; 
     end else begin
-      scratchVal_Accum <= scratchVal_FS + 1'b1;
+      scratchVal_Accum <= {16'hAAAA, scratchVal_FS[15:0]} + 1'b1;
     end
 
     //===============Store ScratchPad (SS)===========================
     m2WriteAddr <= readVal_Accum;
     m2WE <= m2WE_Accum;
-    m2WriteVal <= {16'hAAAA, scratchVal_Accum[15:0]};
+    m2WriteVal <= scratchVal_Accum;
 
     //debugging
     if(m2WE) begin
@@ -103,13 +103,16 @@ always@(posedge clock or negedge rst_n) begin
     write_enable <= 1'b0;
   end else begin
     if(memoryCounter < 15'd4) begin
-      if(pipelineCounter < 8'd120) begin
+      if(pipelineCounter < 8'd111) begin
         pipelineCounter <= pipelineCounter + 4'd8;
         memoryCounter <= memoryCounter;
+      end else begin if (pipelineCounter < 8'd118) begin
+        pipelineCounter <= pipelineCounter +4'd8;
+        memoryCounter <= memoryCounter + 16'b1;
       end else begin
         pipelineCounter <= 8'b0;
-        memoryCounter <= memoryCounter + 16'b1;
-      end
+        memoryCounter <= memoryCounter;
+      end end
 
       write_enable <= 1'b1;
       done <= 1'b0;
