@@ -19,8 +19,9 @@ integer i;
 always #5 clock = ~clock;
 
 initial begin
-  $monitor("WriteBus: %h, ReadVal: %h, Done: %d", WriteBus2, WriteAddress2, done);
-  
+  //$monitor("WriteBus: %h, ReadVal: %h, Done: %d", WriteBus2, WriteAddress2, done);
+  $monitor("Write Counter: %d", dut1.write_cnt);
+
   clock = 0;
   start = 0;
   rst_n = 0;
@@ -33,10 +34,11 @@ initial begin
   $writememh("./output/outputM1.txt",m1.Register);
   $writememh("./output/outputM2.txt",m2.Register);
   $display("DONE: %d", done);
+  $display("number of writes: %d", dut1.write_cnt);
   $finish;
 end
 
-input_pipeline DUT1 ( .start(start), .clock(clock), .rst_n(rst_n),
+input_pipeline dut1 ( .start(start), .clock(clock), .rst_n(rst_n),
       .m1ReadVal(ReadBus1), .m2ReadVal(ReadBus2), .m1ReadAddr(ReadAddress1), 
       .m2ReadAddr(ReadAddress2), .m2WriteAddr(WriteAddress2), 
       .m2WriteVal(WriteBus2), .m2WE(WE2), .done(done));

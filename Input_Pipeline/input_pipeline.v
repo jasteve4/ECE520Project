@@ -32,6 +32,8 @@ reg [7:0] readVal_FI, readVal_FS, readVal_Accum;
 reg [15:0] scratchVal_FS, scratchVal_Accum;
 reg m2WE_FI, m2WE_FS, m2WE_Accum, write_enable;
 
+//debuggig
+reg [256:0] write_cnt;
 
 always@(rst_n or pipelineCounter or memoryCounter) begin
   if(!rst_n) begin
@@ -44,6 +46,7 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
       readVal_Accum <= 0;
       scratchVal_FS <= 0;
       scratchVal_Accum <= 0;
+      write_cnt <= 0;
   end else begin
     //===============Fetch Initial(FI) Stage=========================
     m1ReadAddr <= memoryCounter;
@@ -55,7 +58,7 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     m2ReadAddr <= readVal_FI;
     m2WE_FS <= m2WE_FI;
 
-    if(readVal_FS == readVal_Accum) begin
+    if(readVal_FI == readVal_Accum) begin
       scratchVal_FS <= scratchVal_Accum;
     end else begin
       if(m2ReadVal[31:16] == 16'hAAAA) begin
@@ -79,6 +82,13 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     m2WriteAddr <= readVal_Accum;
     m2WE <= m2WE_Accum;
     m2WriteVal <= {16'hAAAA, scratchVal_Accum[15:0]};
+
+    //debugging
+    if(m2WE) begin
+      write_cnt <= write_cnt + 1;
+    end else begin
+      write_cnt <= write_cnt;
+    end
   end
 end
 
