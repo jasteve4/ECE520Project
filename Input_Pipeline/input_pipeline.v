@@ -13,7 +13,6 @@ m3 = scratchpad memory 2
 m4 = output memory
 
 ========================================*/
-
 module input_pipeline(
   input wire start, clock, rst_n,
   input wire [127:0] m1ReadVal, m2ReadVal,
@@ -23,6 +22,8 @@ module input_pipeline(
   output reg done
 );
 
+parameter ADDRESS_OF_LAST = 3;
+
 reg [6:0] pipelineCounter;
 reg [15:0] memoryCounter;
 
@@ -31,6 +32,7 @@ reg [7:0] readVal_FI, readVal_FS, readVal_Accum;
 reg [15:0] scratchVal_FS;
 reg [31:0] scratchVal_Accum;
 reg m2WE_FI, m2WE_FS, m2WE_Accum, write_enable;
+reg done_FI, done_FS, done_enable;
 
 //debuggig
 reg [256:0] write_cnt;
@@ -57,6 +59,7 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     //===============Fetch ScatchPad(FS) Stage=======================
     readVal_FS <= readVal_FI;
     m2WE_FS <= m2WE_FI;
+    done_FS <= done_FI;
 
     if(readVal_FI == readVal_Accum) begin
       scratchVal_FS <= scratchVal_Accum;
@@ -71,6 +74,7 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
     //===============Accumulate Stage (Accum)========================
     readVal_Accum <= readVal_FS;
     m2WE_Accum <= m2WE_FS;
+    done <= done_FS;
 
     if(readVal_Accum == readVal_FS) begin
       scratchVal_Accum <= scratchVal_Accum + 1'b1; 
@@ -100,26 +104,33 @@ always@(posedge clock or negedge rst_n) begin
     m2WE_FS <= 1'b0;
     m2WE_Accum <= 1'b0;
     m2WE <= 1'b0;
+    done_FI <= 1'b0;
+    done_FS <= 1'b0;
+    done <= 1'b0;
+    done_enable <= 0;
     write_enable <= 1'b0;
   end else begin
-    if(memoryCounter < 15'd4) begin
+  if(memoryCounter <= ADDRESS_OF_LAST) begin
       if(pipelineCounter < 8'd111) begin
         pipelineCounter <= pipelineCounter + 4'd8;
         memoryCounter <= memoryCounter;
-      end else begin if (pipelineCounter < 8'd118) begin
-        pipelineCounter <= pipelineCounter +4'd8;
-        memoryCounter <= memoryCounter + 16'b1;
-      end else begin
-        pipelineCounter <= 8'b0;
-        memoryCounter <= memoryCounter;
-      end end
+      end else begin 
+        if (pipelineCounter < 8'd118) begin
+          pipelineCounter <= pipelineCounter +4'd8;
+          memoryCounter <= memoryCounter + 16'b1;
+        end else begin
+          pipelineCounter <= 8'b0;
+          memoryCounter <= memoryCounter;
+        end 
+      end
 
       write_enable <= 1'b1;
-      done <= 1'b0;
+      done_enable <= 1'b0;
     end else begin
-      memoryCounter <= memoryCounter;
+      memoryCounter <= MEM_ROW_CHECK;
+      pipelineCounter <= pipelineCounter;
       write_enable <= 1'b0;
-      done <= 1'b1;
+      done_enable <= 1'b1;
     end
   end
 end
