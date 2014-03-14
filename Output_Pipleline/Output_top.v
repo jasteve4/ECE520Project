@@ -2,30 +2,80 @@ module Output_top(
   input wire          clock,
   input wire          reset_n,
   input wire          start,
-  input wire [127:0]  SP_ReadBus1,
-  input wire [127:0]  SP_ReadBus2,
-  output wire [15:0]  SP_ReadAddress1,
-  output wire [15:0]  SP_ReadAddress2,
+  input wire [7:0]    CdfMin,
+  input wire [127:0]  M2SP_ReadBus,
+  output wire [15:0]  M2SP_ReadAddress,
+  input wire [127:0]  M3SP_ReadBus,
+  output wire [15:0]  M3SP_ReadAddress,
   output wire         WriteEnable,
   output wire [127:0] Output_MEMBus,
-  output wire [15:0]  Output_MEMAddress
+  output wire [15:0]  Output_MEMAddress,
+  output wire done
   );
 
-  wire [15:0]         Accumlate1;
-  wire [15:0]         Accumlate2;
-  wire [2:0]          RuningCount;
+  wire [7:0]          DataToStageTwo;
+  wire                start_to_stage_two;
+  wire  [15:0]        store_address;
+
+  wire [7:0]          DataToStageThree;
+  wire                start_to_stage_three;
+
+  wire [15:0]          DataToStageFour;
+  wire                start_to_stage_Four;
+
+  wire [7:0]         result;
+  wire                start_to_stage_Five;
+
+  Fetch stage1(
+    .clock(clock),
+    .reset_n(reset_n),
+    .start(start),
+    .ReadBus(M3SP_ReadBus),
+    .ReadAddress(M3SP_ReadAddress),
+    .DataOut(DataToStageTwo),
+    .StartOut(start_to_stage_two),
+    .StoreAddress(store_address)
+    );
+
+
+  CdfFetch stage2(
+    .clock(clock),
+    .reset_n(reset_n),
+    .ReadBus(M2SP_ReadBus),
+    .ReadAddress(M2SP_ReadAddress),
+    .DataIn(DataToStageTwo),
+    .DataOut(DataToStageThree),
+    .StartIn(start_to_stage_two),
+    .StartOut(start_to_stage_three)
+    );
   
-
-  Fetch stage1 (
-  .clock(clock),
-  .reset_n(reset_n),
-  .start(start),
-  .ReadBus1(SP_ReadBus1),
-  .ReadBus2(SP_ReadBus2),
-  .ReadAddress1(SP_ReadAddress1),
-  .ReadAddress2(SP_ReadAddress2),
-  .AccumlateOut1(Accumlate1),
-  .AccumlateOut2(Accumlate2),
-  .store_count(RunningCount)
+  TopExpression stage3(
+    .clock(clock),
+    .reset_n(reset_n),
+    .DataIn(DataToStageThree),
+    .CdfMin(CdfMin),
+    .StartIn(start_to_stage_three),
+    .StartOut(start_to_stage_four),
+    .DataOut(DataToStageFour)
   );
 
+  OutputResult stage4(
+    .clock(clock),
+    .reset_n(reset_n),
+    .DataIn(DataToStageFour),
+    .StartIn(start_to_stage_four),
+    .StartOut(start_to_stage_five),
+    .DataOut(result)
+  );
+
+  Store stage5(
+    .clock(clock),
+    .reset_n(reset_n),
+    .StartIn(start_to_stage_five),
+    .ResultIn(result),
+    .WriteBus(Output_MEMBus),
+    .WriteAddress(Output_MEMAddress),
+    .WriteEnable(WriteEnable),
+    .done(done)
+  );
+endmodule
