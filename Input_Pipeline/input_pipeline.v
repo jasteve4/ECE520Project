@@ -49,6 +49,13 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
       scratchVal_FS <= 0;
       scratchVal_Accum <= 0;
       write_cnt <= 0;
+      m2WE_FI <= 1'b0;
+      m2WE_FS <= 1'b0;
+      m2WE_Accum <= 1'b0;
+      m2WE <= 1'b0;
+      done_FI <= 1'b0;
+      done_FS <= 1'b0;
+      done <= 1'b0;
   end else begin
     //===============Fetch Initial(FI) Stage=========================
     m1ReadAddr <= memoryCounter;
@@ -97,20 +104,14 @@ always@(rst_n or pipelineCounter or memoryCounter) begin
 end
 
 always@(posedge clock or negedge rst_n) begin   
-  if(!rst_n && !start) begin            //Synchronous Active Low Reset
+  if(!rst_n) begin            //Synchronous Active Low Reset
     pipelineCounter <= 8'b0;
     memoryCounter <= 16'b0;
-    m2WE_FI <= 1'b0;
-    m2WE_FS <= 1'b0;
-    m2WE_Accum <= 1'b0;
-    m2WE <= 1'b0;
-    done_FI <= 1'b0;
-    done_FS <= 1'b0;
-    done <= 1'b0;
     done_enable <= 0;
     write_enable <= 1'b0;
   end else begin
-    if(memoryCounter < ADDRESS_OF_LAST) begin
+    if(start) begin
+      if(memoryCounter < ADDRESS_OF_LAST) begin
         if(pipelineCounter < 8'd111) begin
           pipelineCounter <= pipelineCounter + 4'd8;
           memoryCounter <= memoryCounter;
@@ -124,20 +125,26 @@ always@(posedge clock or negedge rst_n) begin
           end 
         end
       
-      write_enable <= 1'b1;
-      done_enable <= 1'b0;
-    end else begin
-      if (pipelineCounter < 8'd118) begin
-        pipelineCounter <= pipelineCounter +4'd8;
-        memoryCounter <= memoryCounter + 16'b1;
         write_enable <= 1'b1;
         done_enable <= 1'b0;
       end else begin
-        pipelineCounter <= 8'b0;
-        memoryCounter <= memoryCounter;
-        write_enable <= 1'b0;
-        done_enable <= 1'b1;
-      end 
+        if (pipelineCounter < 8'd118) begin
+          pipelineCounter <= pipelineCounter +4'd8;
+          memoryCounter <= memoryCounter + 16'b1;
+          write_enable <= 1'b1;
+          done_enable <= 1'b0;
+        end else begin
+          pipelineCounter <= 8'b0;
+          memoryCounter <= memoryCounter;
+          write_enable <= 1'b0;
+          done_enable <= 1'b1;
+        end 
+      end
+    end else begin
+      pipelineCounter <= 8'b0;
+      memoryCounter <= 16'b0;
+      done_enable <= 0;
+      write_enable <= 1'b0;
     end
   end
 end
