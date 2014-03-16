@@ -110,27 +110,34 @@ always@(posedge clock or negedge rst_n) begin
     done_enable <= 0;
     write_enable <= 1'b0;
   end else begin
-  if(memoryCounter <= ADDRESS_OF_LAST) begin
-      if(pipelineCounter < 8'd111) begin
-        pipelineCounter <= pipelineCounter + 4'd8;
-        memoryCounter <= memoryCounter;
-      end else begin 
-        if (pipelineCounter < 8'd118) begin
-          pipelineCounter <= pipelineCounter +4'd8;
-          memoryCounter <= memoryCounter + 16'b1;
-        end else begin
-          pipelineCounter <= 8'b0;
+    if(memoryCounter < ADDRESS_OF_LAST) begin
+        if(pipelineCounter < 8'd111) begin
+          pipelineCounter <= pipelineCounter + 4'd8;
           memoryCounter <= memoryCounter;
-        end 
-      end
-
+        end else begin 
+          if (pipelineCounter < 8'd118) begin
+            pipelineCounter <= pipelineCounter +4'd8;
+            memoryCounter <= memoryCounter + 16'b1;
+          end else begin
+            pipelineCounter <= 8'b0;
+            memoryCounter <= memoryCounter;
+          end 
+        end
+      
       write_enable <= 1'b1;
       done_enable <= 1'b0;
     end else begin
-      memoryCounter <= MEM_ROW_CHECK;
-      pipelineCounter <= pipelineCounter;
-      write_enable <= 1'b0;
-      done_enable <= 1'b1;
+      if (pipelineCounter < 8'd118) begin
+        pipelineCounter <= pipelineCounter +4'd8;
+        memoryCounter <= memoryCounter + 16'b1;
+        write_enable <= 1'b1;
+        done_enable <= 1'b0;
+      end else begin
+        pipelineCounter <= 8'b0;
+        memoryCounter <= memoryCounter;
+        write_enable <= 1'b0;
+        done_enable <= 1'b1;
+      end 
     end
   end
 end
