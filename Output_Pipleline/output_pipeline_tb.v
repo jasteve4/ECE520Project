@@ -3,7 +3,8 @@ module output_pipeline_tb();
 reg clock = 1;
 reg reset_n = 1;
 reg start = 0;
-reg [7:0] cdf_min = 8'd1;
+reg [19:0] cdf_min = 8'd1;
+reg [19:0] divisor = 20'd63;
 
 reg           m2_WriteEnable = 1;
 wire [15:0]   m2_WriteAddress;
@@ -82,6 +83,7 @@ Output_top output_top (
   .clock(clock),
   .reset_n(reset_n),
   .start(start),
+  .divisor(divisor),
   .CdfMin(cdf_min),
   .M2SP_ReadBus(m2_ReadBus2),
   .M2SP_ReadAddress(m2_ReadAddress2),
