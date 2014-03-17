@@ -23,13 +23,13 @@ initial begin
   $monitor("Write Counter: %d", dut1.write_cnt);
 
   clock = 0;
-  start = 0;
   rst_n = 0;
+  start = 0;
   $readmemh("input_wiki.txt",m1.Register);
   
   #30
-  start = 1;
   rst_n = 1;
+  #10 start = 1;
   #1000
   $writememh("./output/outputM1.txt",m1.Register);
   $writememh("./output/outputM2.txt",m2.Register);
