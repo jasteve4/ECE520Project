@@ -2,7 +2,8 @@ module Output_top(
   input wire          clock,
   input wire          reset_n,
   input wire          start,
-  input wire [7:0]    CdfMin,
+  input wire [19:0]   CdfMin,
+  input wire [19:0]   divisor,
   input wire [127:0]  M2SP_ReadBus,
   output wire [15:0]  M2SP_ReadAddress,
   input wire [127:0]  M3SP_ReadBus,
@@ -15,18 +16,18 @@ module Output_top(
 
   wire [7:0]          DataToStageTwo;
   wire                start_to_stage_two;
-  wire  [15:0]        store_address;
+  wire [15:0]         store_address;
 
-  wire [7:0]          DataToStageThree;
+  wire [19:0]         DataToStageThree;
   wire                start_to_stage_three;
 
-  wire [15:0]          DataToStageFour;
+  wire [27:0]         DataToStageFour;
   wire                start_to_stage_Four;
 
-  wire [7:0]         result;
+  wire [7:0]          result;
   wire                start_to_stage_Five;
 
-  Fetch stage1(
+  Output_Fetch_MEM stage1(
     .clock(clock),
     .reset_n(reset_n),
     .start(start),
@@ -38,7 +39,7 @@ module Output_top(
     );
 
 
-  CdfFetch stage2(
+  Output_Fetch_Cdf stage2(
     .clock(clock),
     .reset_n(reset_n),
     .ReadBus(M2SP_ReadBus),
@@ -49,7 +50,7 @@ module Output_top(
     .StartOut(start_to_stage_three)
     );
   
-  TopExpression stage3(
+  Output_TopExpression stage3(
     .clock(clock),
     .reset_n(reset_n),
     .DataIn(DataToStageThree),
@@ -59,16 +60,17 @@ module Output_top(
     .DataOut(DataToStageFour)
   );
 
-  OutputResult stage4(
+  Output_Result stage4(
     .clock(clock),
     .reset_n(reset_n),
     .DataIn(DataToStageFour),
     .StartIn(start_to_stage_four),
     .StartOut(start_to_stage_five),
+    .Divisor(divisor),
     .DataOut(result)
   );
 
-  Store stage5(
+  Output_Store stage5(
     .clock(clock),
     .reset_n(reset_n),
     .StartIn(start_to_stage_five),

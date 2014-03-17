@@ -6,11 +6,13 @@ module Cdf_top(
   output wire [15:0]  SP_ReadAddress,
   output wire         WriteEnable,
   output wire [127:0] Output_MEMBus,
-  output wire [15:0]  Output_MEMAddress
+  output wire [15:0]  Output_MEMAddress,
+  output wire [19:0] Cdf_min,
+  output wire done
   );
 
-  wire [15:0]         Accumlate;
-  wire [15:0]         AccumlateResult;
+  wire [19:0]         Accumlate;
+  wire [19:0]         AccumlateResult;
   wire [15:0]         store_address;
   wire [15:0]         store_address_to_store;
   wire                start_to_accumlate;
@@ -21,7 +23,7 @@ module Cdf_top(
 
 
 
-  Fetch stage1 (
+  Cdf_Fetch stage1 (
     .clock(clock),
     .reset_n(reset_n),
     .start(start),
@@ -32,7 +34,7 @@ module Cdf_top(
     .StoreAddress(store_address)
     );
 
-  Accumlate stage2(
+  Cdf_Accumlate stage2(
     .clock(clock),
     .reset_n(reset_n),
     .AccumlateIn(Accumlate),
@@ -43,7 +45,7 @@ module Cdf_top(
     .StartOut(start_to_store)
     );
 
-  Store stage3(
+  Cdf_Store stage3(
     .clock(clock),
     .reset_n(reset_n),
     .StartIn(start_to_store),
