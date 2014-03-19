@@ -1,13 +1,18 @@
 
-
 module Top_Testbench();
 
 
   reg clock = 1;
   reg reset_n = 1;
   reg start = 0;
-  reg [19:0] cdf_min = 8'd1;
-  reg [19:0] divisor = 20'd63;
+
+  wire          m1_WriteEnable;
+  wire [15:0]   m1_WriteAddress;
+  wire [15:0]   m1_ReadAddress1;
+  wire [15:0]   m1_ReadAddress2;
+  wire [127:0]  m1_WriteBus;
+  wire [127:0]  m1_ReadBus1;
+  wire [127:0]  m1_ReadBus2;
 
   reg           m2_WriteEnable = 1;
   wire [15:0]   m2_WriteAddress;
@@ -49,6 +54,17 @@ module Top_Testbench();
     $finish;
   end
 
+  sram_2R1W m1 (
+    .clock(clock), 
+    .WE(m1_WriteEnable), 
+    .WriteAddress(m1_WriteAddress), 
+    .ReadAddress1(m1_ReadAddress1), 
+    .ReadAddress2(m1_ReadAddress2), 
+    .WriteBus(m1_WriteBus), 
+    .ReadBus1(m1_ReadBus1), 
+    .ReadBus2(m1_ReadBus2)
+    );
+
   sram_2R1W m2 (
     .clock(clock), 
     .WE(m2_WriteEnable), 
@@ -82,20 +98,27 @@ module Top_Testbench();
     .ReadBus2(m4_ReadBus2)
     );
 
-  Output_top output_top (
+
+  Top(
     .clock(clock),
     .reset_n(reset_n),
     .start(start),
-    .divisor(divisor),
-    .CdfMin(cdf_min),
-    .M2SP_ReadBus(m2_ReadBus2),
-    .M2SP_ReadAddress(m2_ReadAddress2),
-    .M3SP_ReadBus(m3_ReadBus2),
-    .M3SP_ReadAddress(m3_ReadAddress2),
-    .WriteEnable(m4_WriteEnable),
-    .Output_MEMBus(m4_WriteBus),
-    .Output_MEMAddress(m4_WriteAddress),
-    .done(done)
+    .M1_ReadBus1(m1_ReadBus1),
+    .M1_ReadAddress1(m1_ReadAddress1),
+    .M2_ReadBus1(m2_ReadBus),
+    .M2_ReadBus2(m2_ReadBus),
+    .M2_ReadAddress1(m2_ReadAddress1),
+    .M2_ReadAddress2(m2_ReadAddress2),
+    .M2_WriteBus(m2_WriteBus),
+    .M2_WriteAddress(m2_WriteAddress),
+    .M2_WriteEnable(m2_WriteEnable),
+    .M3_ReadBus1(m3_ReadBus1),
+    .M3_ReadAddress1(m3_ReadAddress),
+    .M3_WriteBus(m3_WriteBus),
+    .M3_WriteAddress(m3_WriteAddress),
+    .M3_WriteEnable(m3_WriteEnable),
+    .M4_WriteBus(m4_WriteBus),
+    .M4_WriteAddress(m4_WriteAddress),
+    .M4_WriteEnable(m4_WriteEnable),
     );
-
 endmodule

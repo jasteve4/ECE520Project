@@ -19,12 +19,15 @@ module Top(
   output wire M3_WriteEnable,
   output wire M4_WriteBus,
   output wire M4_WriteAddress,
-  output wire M4_WriteEnable,
+  output wire M4_WriteEnable
   );
 
 
-
-
+  wire input_base_offset, output_base_offset;
+  wire output_start, input_start, cdf_start;
+  wire output_done,input_done, cdf_done;
+  wire [19:0] cdf_min, cdf_min_out, divisor;
+  wire cdf_valid;
 
 
   Output_top(
@@ -40,7 +43,8 @@ module Top(
     .WriteEnable(M4_WriteEnable),
     .Output_MEMBus(M4_WriteBus),
     .Output_MEMAddress(M4_WriteAddress),
-    .done(output_done)
+    .done(output_done),
+    .output_base_offset(output_base_offset)
     );
 
 
@@ -55,7 +59,9 @@ module Top(
     .Output_MEMBus(M2_WriteBus),
     .Output_MEMAddress(M2_WriteAddress),
     .Cdf_Min(cdf_min),
-    .done(cdf_done)
+    .done(cdf_done),
+    .input_base_offset(input_base_offset),
+    .cdf_valid(cdf_valid)
     );
 
 
@@ -71,8 +77,11 @@ module Top(
     .output_done(output_done),
     .cdf_done(cdf_done),
     .Cdf_Min(cdf_min),
-    .Cdf_Min_Out(cdf_min_out)
-    .Divisor(divisor)
+    .Cdf_Min_Out(cdf_min_out),
+    .Divisor(divisor),
+    .input_base_offset(input_base_offset),
+    .output_base_offset(output_base_offset),
+    .cdf_valid(cdf_valid)
     );
 
 

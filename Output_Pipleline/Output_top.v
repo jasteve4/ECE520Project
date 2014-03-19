@@ -11,7 +11,8 @@ module Output_top(
   output wire         WriteEnable,
   output wire [127:0] Output_MEMBus,
   output wire [15:0]  Output_MEMAddress,
-  output wire done
+  output wire done,
+  input wire output_base_offset
   );
 
   wire [7:0]          DataToStageTwo;
@@ -35,7 +36,8 @@ module Output_top(
     .ReadAddress(M3SP_ReadAddress),
     .DataOut(DataToStageTwo),
     .StartOut(start_to_stage_two),
-    .StoreAddress(store_address)
+    .StoreAddress(store_address),
+    .output_base_offset(output_base_offset)
     );
 
 
@@ -48,6 +50,7 @@ module Output_top(
     .DataOut(DataToStageThree),
     .StartIn(start_to_stage_two),
     .StartOut(start_to_stage_three)
+    .output_base_offset(output_base_offset)
     );
   
   Output_TopExpression stage3(

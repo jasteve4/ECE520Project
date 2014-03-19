@@ -44,14 +44,23 @@ module Output_Fetch_MEM(
             end
           else if(start & (short_count == 4'hf))
             begin
-              ReadAddress <= ReadAddress + 1'd1;
-              StartOut <= 1'd1;
+              if((ReadAddress[14:0] +1'd1) == 15'd19200)
+                begin
+                  StartOut <= 1'd0
+                  ReadAddress <= ReadAddress;
+                  short_count <= short_count;
+                end
+              else
+                begin
+                  StartOut <= 1'd1;
+                  ReadAddress <= ReadAddress + 1'd1;
+                  short_count <= 4'd0;
+                end
               data_in <= ReadBus;
-              short_count <= 4'd0;
             end
           else
             begin
-              ReadAddress <= 16'b0;
+              ReadAddress <= {output_base_offset, 15'b0};
               StartOut <= 1'b0;
               data_in <= 8'dx;
               short_count <= 1'b0;

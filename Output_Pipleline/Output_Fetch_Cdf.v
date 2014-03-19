@@ -6,12 +6,13 @@ module Output_Fetch_Cdf(
   input wire [7:0]    DataIn,
   output reg [19:0]   DataOut,
   input wire          StartIn,
-  output reg          StartOut
+  output reg          StartOut,
+  input wire          output_base_offset
   );
 
   reg [7:0]           data;
 
-  assign ReadAddress = {8'b0,DataIn};
+  assign ReadAddress = {output_base_offset,7'b0,DataIn};
 
   always@(posedge clock or negedge reset_n)
     begin

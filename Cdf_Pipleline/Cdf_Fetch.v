@@ -53,7 +53,7 @@ module Cdf_Fetch(
             end
           else
             begin
-              ReadAddress <= 16'b0;
+              ReadAddress <= {input_base_offset,15'b0};
               AccumlateOut <= 20'b0;
               StartOut <= 1'b0;
               count <= 1'b0;
