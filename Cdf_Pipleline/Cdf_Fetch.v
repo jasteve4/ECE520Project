@@ -6,7 +6,8 @@ module Cdf_Fetch(
   output reg [15:0]   ReadAddress,
   output reg [19:0]   AccumlateOut,
   output reg          StartOut,
-  output reg [15:0]   StoreAddress
+  output reg [15:0]   StoreAddress,
+  input wire input_base_offset
   );
 
   reg [8:0]           count;
@@ -62,4 +63,3 @@ module Cdf_Fetch(
     end
 
 endmodule
-

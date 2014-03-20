@@ -3,6 +3,10 @@ module cdf_pipeline_tb();
 reg clock = 1;
 reg reset_n = 1;
 reg start = 0;
+reg input_base_offset = 0;
+wire cdf_valid;
+wire done;
+wire [19:0] cdf_min;
 
 reg           m2_WriteEnable = 1;
 wire [15:0]   m2_WriteAddress;
@@ -31,7 +35,11 @@ initial begin
   #10 reset_n = 0;
   #10 reset_n = 1;
   #20 start = 1;
-  #500  
+  #2590
+  start = 0;
+  #20 input_base_offset = 1; 
+  #10 start = 1; 
+  #2590
   $writememh("./output/outputM2.txt",m2.Register);
   $writememh("./output/outputM4.txt",m4.Register);
   $finish;
@@ -67,7 +75,11 @@ Cdf_top output_top (
   .SP_ReadAddress(m2_ReadAddress2),
   .WriteEnable(m4_WriteEnable),
   .Output_MEMBus(m4_WriteBus),
-  .Output_MEMAddress(m4_WriteAddress)
+  .Output_MEMAddress(m4_WriteAddress),
+  .Cdf_Min(cdf_min),
+  .done(done),
+  .input_base_offset(input_base_offset),
+  .cdf_valid(cdf_valid)
   );
 
 endmodule

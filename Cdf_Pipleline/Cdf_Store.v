@@ -17,7 +17,7 @@ module Cdf_Store(
           WriteBus <= 16'b0;
           WriteAddress <= 16'b0;
           WriteEnable <= 1'b0;
-          done <= 1'd0;
+          done <= 1'd1;
         end
       else
         begin
@@ -33,7 +33,7 @@ module Cdf_Store(
               WriteBus <= 16'b0;
               WriteAddress <= 16'b0;
               WriteEnable <= 1'b0;
-              done <= 1'b0;
+              done <= 1'b1;
             end
         end
     end
