@@ -16,6 +16,7 @@ m4 = output memory
 module input_pipeline(
   input wire start, clock, rst_n,
   input wire [127:0] m1ReadVal, m2ReadVal,
+  input wire inputBaseOffset,
   output reg [15:0] m1ReadAddr, m2ReadAddr, m2WriteAddr, 
   output reg [127:0] m2WriteVal,
   output reg m2WE,
@@ -76,7 +77,7 @@ always@(posedge clock) begin
     readVal_FI <= m1ReadVal[pipelineCounterFF+:8'd8];
     m2WE_FI <= write_enable;
     done_FI <= done_enable;
-    m2ReadAddr <= m1ReadVal[pipelineCounterFF+:8'd8];
+    m2ReadAddr <= {inputBaseOffse,tm1ReadVal[pipelineCounterFF+:8'd8]};
     
     if(m2WE &&(readVal_Accum == m1ReadVal[pipelineCounterFF+:8'd8])) begin
       addVal_FI <= 2'd2;
@@ -112,7 +113,7 @@ always@(posedge clock) begin
     end
 
     //===============Store ScratchPad (SS)===========================
-    m2WriteAddr <= readVal_Accum;
+    m2WriteAddr <= {inputBaseOffse,treadVal_Accum};
     m2WE <= m2WE_Accum;
     m2WriteVal <= scratchVal_Accum;
 
