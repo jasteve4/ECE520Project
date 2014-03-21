@@ -5,6 +5,7 @@ reg reset_n = 1;
 reg start = 0;
 reg [19:0] cdf_min = 8'd1;
 reg [19:0] divisor = 20'd63;
+reg output_base_offset = 1'b1;
 
 reg           m2_WriteEnable = 1;
 wire [15:0]   m2_WriteAddress;
@@ -92,7 +93,8 @@ Output_top output_top (
   .WriteEnable(m4_WriteEnable),
   .Output_MEMBus(m4_WriteBus),
   .Output_MEMAddress(m4_WriteAddress),
-  .done(done)
+  .done(done),
+  .output_base_offset(output_base_offset)
   );
 
 endmodule

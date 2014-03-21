@@ -6,7 +6,8 @@ module Output_Fetch_MEM(
   output reg [15:0]   ReadAddress,
   output reg [7:0]   DataOut,
   output reg          StartOut,
-  output reg [15:0]   StoreAddress
+  output reg [15:0]   StoreAddress,
+  input wire output_base_offset
   );
 
   reg [3:0]           short_count;
@@ -46,7 +47,7 @@ module Output_Fetch_MEM(
             begin
               if((ReadAddress[14:0] +1'd1) == 15'd19200)
                 begin
-                  StartOut <= 1'd0
+                  StartOut <= 1'd0;
                   ReadAddress <= ReadAddress;
                   short_count <= short_count;
                 end
