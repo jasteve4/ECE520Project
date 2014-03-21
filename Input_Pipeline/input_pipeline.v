@@ -202,8 +202,11 @@ always@(cstate or start or pipelineCounterFF) begin
       memoryCounter <= memoryCounter;
       done_enable <= 1'b1;
       write_enable <= 1'b0;
-
-      nstate <= DONE;
+      if(START) begin
+        nstate <= DONE;
+      end else begin
+        nstate <= RESET;
+      end
     end
 
     default: begin
