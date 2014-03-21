@@ -30,7 +30,7 @@ module Top(
   wire cdf_valid;
 
 
-  Output_top(
+  Output_top dut_output_top(
     .clock(clock),
     .reset_n(reset_n),
     .start(output_start),
@@ -49,7 +49,7 @@ module Top(
 
 
 
-  Cdf_top(
+  Cdf_top dut_CDF_top(
     .clock(clock),
     .reset_n(reset_n),
     .start(cdf_start),
@@ -66,7 +66,7 @@ module Top(
 
 
 
-  Controllor(
+  Controllor dut_Controller(
     .clock(clock),
     .reset_n(reset_n),
     .start(start),
@@ -86,7 +86,7 @@ module Top(
 
 //The below module is the first module in the overall pipeline
 //This counts how many times each pixel value occurs
-  input_pipeline(
+  input_pipeline dut_Input_Pipeline(
     .start(input_start), 
     .clock(clock), 
     .rst_n(reset_n),

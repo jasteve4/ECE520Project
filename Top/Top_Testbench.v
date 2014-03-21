@@ -99,7 +99,7 @@ module Top_Testbench();
     );
 
 
-  Top(
+  Top dut_Top(
     .clock(clock),
     .reset_n(reset_n),
     .start(start),
