@@ -119,6 +119,6 @@ module Top_Testbench();
     .M3_WriteEnable(m3_WriteEnable),
     .M4_WriteBus(m4_WriteBus),
     .M4_WriteAddress(m4_WriteAddress),
-    .M4_WriteEnable(m4_WriteEnable),
+    .M4_WriteEnable(m4_WriteEnable)
     );
 endmodule
