@@ -1,4 +1,3 @@
-
 module Top_Testbench();
 
 
@@ -14,7 +13,7 @@ module Top_Testbench();
   wire [127:0]  m1_ReadBus1;
   wire [127:0]  m1_ReadBus2;
 
-  reg           m2_WriteEnable = 1;
+  wire          m2_WriteEnable;
   wire [15:0]   m2_WriteAddress;
   wire [15:0]   m2_ReadAddress1;
   wire [15:0]   m2_ReadAddress2;
@@ -105,15 +104,17 @@ module Top_Testbench();
     .start(start),
     .M1_ReadBus1(m1_ReadBus1),
     .M1_ReadAddress1(m1_ReadAddress1),
-    .M2_ReadBus1(m2_ReadBus),
-    .M2_ReadBus2(m2_ReadBus),
+    .M2_ReadBus1(m2_ReadBus1),
+    .M2_ReadBus2(m2_ReadBus2),
     .M2_ReadAddress1(m2_ReadAddress1),
     .M2_ReadAddress2(m2_ReadAddress2),
     .M2_WriteBus(m2_WriteBus),
     .M2_WriteAddress(m2_WriteAddress),
     .M2_WriteEnable(m2_WriteEnable),
     .M3_ReadBus1(m3_ReadBus1),
-    .M3_ReadAddress1(m3_ReadAddress),
+    .M3_ReadBus2(m3_ReadBus2),
+    .M3_ReadAddress1(m3_ReadAddress1),
+    .M3_ReadAddress2(m3_ReadAddress2),
     .M3_WriteBus(m3_WriteBus),
     .M3_WriteAddress(m3_WriteAddress),
     .M3_WriteEnable(m3_WriteEnable),
