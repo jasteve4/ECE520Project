@@ -49,9 +49,6 @@ reg m2WE_FI, m2WE_FS, m2WE_Accum, write_enable;
 reg done_FI, done_FS, done_enable;
 reg [2:0] cstate, nstate;
 
-//debuggig
-reg [256:0] write_cnt;
-
 always@(posedge clock) begin
   if(!rst_n && !start) begin
       m1ReadAddr <= 0;
@@ -63,7 +60,6 @@ always@(posedge clock) begin
       readVal_Accum <= 0;
       scratchVal_FS <= 0;
       scratchVal_Accum <= 0;
-      write_cnt <= 0;
       m2WE_FI <= 1'b0;
       m2WE_FS <= 1'b0;
       m2WE_Accum <= 1'b0;
@@ -77,7 +73,7 @@ always@(posedge clock) begin
     readVal_FI <= m1ReadVal[pipelineCounterFF+:8'd8];
     m2WE_FI <= write_enable;
     done_FI <= done_enable;
-    m2ReadAddr <= {inputBaseOffse,tm1ReadVal[pipelineCounterFF+:8'd8]};
+    m2ReadAddr <= {inputBaseOffset,m1ReadVal[pipelineCounterFF+:8'd8]};
     
     if(m2WE &&(readVal_Accum == m1ReadVal[pipelineCounterFF+:8'd8])) begin
       addVal_FI <= 2'd2;
@@ -113,16 +109,9 @@ always@(posedge clock) begin
     end
 
     //===============Store ScratchPad (SS)===========================
-    m2WriteAddr <= {inputBaseOffse,treadVal_Accum};
+    m2WriteAddr <= {inputBaseOffset,readVal_Accum};
     m2WE <= m2WE_Accum;
     m2WriteVal <= scratchVal_Accum;
-
-    //debugging
-    if(m2WE) begin
-      write_cnt <= write_cnt + 1;
-    end else begin
-      write_cnt <= write_cnt;
-    end
   end
 end
 
@@ -202,7 +191,7 @@ always@(cstate or start or pipelineCounterFF) begin
       memoryCounter <= memoryCounter;
       done_enable <= 1'b1;
       write_enable <= 1'b0;
-      if(START) begin
+      if(start) begin
         nstate <= DONE;
       end else begin
         nstate <= RESET;
