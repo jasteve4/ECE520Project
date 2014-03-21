@@ -84,5 +84,21 @@ module Top(
     .cdf_valid(cdf_valid)
     );
 
+//The below module is the first module in the overall pipeline
+//This counts how many times each pixel value occurs
+  input_pipeline(
+    .start(input_start), 
+    .clock(clock), 
+    .rst_n(reset_n),
+    .m1ReadVal(M1_ReadBus), 
+    .m2ReadVal(M2_ReadBus),
+    .inputBaseOffset(inputBaseOffset),
+    .m1ReadAddr(M1_ReadAddress), 
+    .m2ReadAddr(M2_ReadAddress), 
+    .m2WriteAddr(M2_WriteAddress), 
+    .m2WriteVal(M2_Write_Bus),
+    .m2WE(M2_WriteEnable),
+    .done(input_done)
+  );
 
 endmodule
