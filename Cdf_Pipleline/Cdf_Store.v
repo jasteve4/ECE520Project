@@ -6,9 +6,10 @@ module Cdf_Store(
   input wire [15:0] StoreAddressIn,
   output reg [127:0] WriteBus,
   output reg [15:0] WriteAddress,
-  output reg WriteEnable,
-  output reg done
+  output reg WriteEnable
   );
+
+
 
   always@(posedge clock or negedge reset_n)
     begin
@@ -17,7 +18,6 @@ module Cdf_Store(
           WriteBus <= 16'b0;
           WriteAddress <= 16'b0;
           WriteEnable <= 1'b0;
-          done <= 1'd1;
         end
       else
         begin
@@ -26,14 +26,12 @@ module Cdf_Store(
               WriteBus <= ResultIn;
               WriteAddress <= StoreAddressIn;
               WriteEnable <= 1'b1;
-              done <= 1'b0;
             end
           else
             begin
               WriteBus <= 16'b0;
               WriteAddress <= 16'b0;
               WriteEnable <= 1'b0;
-              done <= 1'b1;
             end
         end
     end

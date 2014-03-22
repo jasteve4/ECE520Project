@@ -1,17 +1,19 @@
 module Cdf_Fetch(
   input wire          clock,
   input wire          reset_n,
-  input wire          start,
+  input wire         start,
   input wire [127:0]  ReadBus,
   output reg [15:0]   ReadAddress,
   output reg [19:0]   AccumlateOut,
   output reg          StartOut,
   output reg [15:0]   StoreAddress,
-  input wire input_base_offset
+  input wire input_base_offset,
+  output reg done
   );
 
   reg [8:0]           count;
   wire [15:0]          DataIn;
+  reg done0, done1;
 
   assign DataIn = (ReadBus[45:20] == 16'haaaa) ? ReadBus[19:0] : 20'b0;
 
@@ -20,10 +22,14 @@ module Cdf_Fetch(
       if(!reset_n)
         begin
           StoreAddress <= 16'b0;
+          done1 <= 1'd0;
+          done <= 1'd0;
         end
       else
         begin
           StoreAddress <= ReadAddress;
+          done1 <= done0;
+          done <= done1;
         end
     end
 
@@ -35,6 +41,7 @@ module Cdf_Fetch(
           AccumlateOut <= 20'b0;
           StartOut <= 1'b0;
           count <= 0;
+          done0 <= 1'd0;
         end
       else
         begin
@@ -44,6 +51,7 @@ module Cdf_Fetch(
               AccumlateOut <= DataIn;
               StartOut <= 1'b1;
               count <= count + 1'b1;
+              done0 <= 1'd0;
             end
           else if(start & (count >9'd255))
             begin
@@ -51,6 +59,7 @@ module Cdf_Fetch(
               AccumlateOut <= DataIn;
               StartOut <= 1'b0;
               count <= count;
+              done0 <= 1'd1;
             end
           else
             begin
@@ -58,6 +67,7 @@ module Cdf_Fetch(
               AccumlateOut <= 20'b0;
               StartOut <= 1'b0;
               count <= 1'b0;
+              done0 <= 1'd0;
             end
         end
     end
