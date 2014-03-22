@@ -3,7 +3,7 @@ module Cdf_Fetch(
   input wire          reset_n,
   input wire         start,
   input wire [127:0]  ReadBus,
-  output reg [15:0]   ReadAddress,
+  output wire [15:0]   ReadAddr,
   output reg [19:0]   AccumlateOut,
   output reg          StartOut,
   output reg [15:0]   StoreAddress,
@@ -12,10 +12,20 @@ module Cdf_Fetch(
   );
 
   reg [8:0]           count;
-  wire [15:0]          DataIn;
+  reg [19:0]         DataIn;
+  reg [15:0]          ReadAddress;
   reg done0, done1;
 
-  assign DataIn = (ReadBus[45:20] == 16'haaaa) ? ReadBus[19:0] : 20'b0;
+ // assign DataIn = (ReadBus[45:20] == 16'haaaa) ? ReadBus[19:0] : 20'b0;
+  assign ReadAddr = (start) ? ReadAddress : 16'bz;
+
+  always@(*)
+    begin
+      if(ReadBus[45:20] == 16'haaaa)
+        DataIn <= ReadBus[19:0];
+      else
+        DataIn <= 20'd0;
+    end
 
   always@(posedge clock or negedge reset_n)
     begin

@@ -28,7 +28,7 @@ module Cdf_top(
     .reset_n(reset_n),
     .start(start),
     .ReadBus(SP_ReadBus),
-    .ReadAddress(SP_ReadAddress),
+    .ReadAddr(SP_ReadAddress),
     .AccumlateOut(Accumlate),
     .StartOut(start_to_accumlate),
     .StoreAddress(store_address),

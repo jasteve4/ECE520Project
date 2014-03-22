@@ -6,7 +6,6 @@ module Output_Store(
   output reg [127:0] WriteBus,
   output reg [15:0] WriteAddress,
   output reg WriteEnable,
-  output reg done,
   input wire output_base_offset
   );
   
@@ -29,7 +28,6 @@ module Output_Store(
           next_WriteAddress <= 16'b0;
           WriteEnable <= 1'b0;
           short_count <= 4'd15;
-          done <= 1'd1;
         end
       else
         begin
@@ -39,7 +37,6 @@ module Output_Store(
               next_WriteAddress <= next_WriteAddress + 1'd1;
               WriteEnable <= 1'b1;
               short_count <= 4'd15;
-              done <= 1'b0;
             end
           else if(StartIn)
             begin
@@ -47,7 +44,6 @@ module Output_Store(
               next_WriteAddress <= next_WriteAddress;
               WriteEnable <= 1'b0;
               short_count <= short_count - 1'b1;
-              done <= 1'b0;
             end
           else
             begin
@@ -55,7 +51,6 @@ module Output_Store(
               next_WriteAddress <= {output_base_offset,15'b0};
               WriteEnable <= 1'b0;
               short_count <= 4'd15;
-              done <= 1'b1;
             end
         end
     end

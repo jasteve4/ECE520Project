@@ -37,7 +37,8 @@ module Output_top(
     .DataOut(DataToStageTwo),
     .StartOut(start_to_stage_two),
     .StoreAddress(store_address),
-    .output_base_offset(output_base_offset)
+    .output_base_offset(output_base_offset),
+    .done(done)
     );
 
 
@@ -81,7 +82,6 @@ module Output_top(
     .WriteBus(Output_MEMBus),
     .WriteAddress(Output_MEMAddress),
     .WriteEnable(WriteEnable),
-    .done(done),
     .output_base_offset(output_base_offset)
   );
 endmodule

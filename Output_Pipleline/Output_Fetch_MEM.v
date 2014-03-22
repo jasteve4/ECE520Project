@@ -7,21 +7,35 @@ module Output_Fetch_MEM(
   output reg [7:0]   DataOut,
   output reg          StartOut,
   output reg [15:0]   StoreAddress,
-  input wire output_base_offset
+  input wire output_base_offset,
+  output reg done
   );
 
   reg [3:0]           short_count;
   reg [127:0]           data_in;
+  reg done0, done1, done2, done3, done4, done5;
 
   always@(posedge clock or negedge reset_n)
     begin
       if(!reset_n)
         begin
           StoreAddress <= 16'b0;
+          done1 <= 1'd0;
+          done2 <= 1'd0;
+          done3 <= 1'd0;
+          done4 <= 1'd0;
+          done5 <= 1'd0;
+          done <= 1'd0;
         end
       else
         begin
           StoreAddress <= ReadAddress;
+          done1 <= done0;
+          done2 <= done1;
+          done3 <= done2;
+          done4 <= done3;
+          done5 <= done4;
+          done <= done5;
         end
     end
 
@@ -33,6 +47,7 @@ module Output_Fetch_MEM(
           StartOut <= 1'b0;
           data_in <= 8'dx;
           short_count <= 0;
+          done0 <= 1'b0;
         end
       else
         begin
@@ -42,6 +57,7 @@ module Output_Fetch_MEM(
               StartOut <= 1'b1;
               data_in <= ReadBus;
               short_count <= short_count + 1'b1;
+              done0 <= 1'b0;
             end
           else if(start & (short_count == 4'hf))
             begin
@@ -50,12 +66,14 @@ module Output_Fetch_MEM(
                   StartOut <= 1'd0;
                   ReadAddress <= ReadAddress;
                   short_count <= short_count;
+                  done0 <= 1'b1;
                 end
               else
                 begin
                   StartOut <= 1'd1;
                   ReadAddress <= ReadAddress + 1'd1;
                   short_count <= 4'd0;
+                  done0 <= 1'b0;
                 end
               data_in <= ReadBus;
             end
@@ -65,6 +83,7 @@ module Output_Fetch_MEM(
               StartOut <= 1'b0;
               data_in <= 8'dx;
               short_count <= 1'b0;
+              done <= 1'd0;
             end
         end
     end
