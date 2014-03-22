@@ -42,8 +42,7 @@ reg [15:0] memoryCounter, memoryCounterFF;
 
 //pipeline registers
 reg [7:0] readVal_FI, readVal_FS, readVal_Accum;
-reg [15:0] scratchVal_FS;
-reg [31:0] scratchVal_Accum;
+reg [31:0] scratchVal_FS, scratchVal_Accum;
 reg [1:0] addVal_FI, addVal_FS;
 reg m2WE_FI, m2WE_FS, m2WE_Accum, write_enable;
 reg done_FI, done_FS, done_enable;
@@ -75,7 +74,7 @@ always@(posedge clock) begin
     done_FI <= done_enable;
     m2ReadAddr <= {inputBaseOffset,m1ReadVal[pipelineCounterFF+:8'd8]};
     
-    if(m2WE &&(readVal_Accum == m1ReadVal[pipelineCounterFF+:8'd8])) begin
+    if(m2WE &&(m2WriteAddr == m1ReadVal[pipelineCounterFF+:8'd8])) begin
       addVal_FI <= 2'd2;
     end else begin
       addVal_FI <= 2'b1;
@@ -87,8 +86,8 @@ always@(posedge clock) begin
     m2WE_FS <= m2WE_FI;
     done_FS <= done_FI;
 
-    if(m2WE_Accum && (readVal_FI == readVal_Accum)) begin
-      scratchVal_FS <= scratchVal_Accum;
+    if(m2WE && (readVal_FI == m2WriteAddr)) begin
+      scratchVal_FS <= m2WriteVal;
     end else begin
       if(m2ReadVal[31:16] == 16'hAAAA) begin
         scratchVal_FS <= m2ReadVal;
@@ -102,8 +101,8 @@ always@(posedge clock) begin
     m2WE_Accum <= m2WE_FS;
     done <= done_FS;
 
-    if(m2WE_Accum && (readVal_Accum == readVal_FS)) begin
-      scratchVal_Accum <= scratchVal_Accum + addVal_FS; 
+    if(m2WE && (m2WriteAddr == readVal_FS)) begin
+      scratchVal_Accum <= m2WriteVal + addVal_FS; 
     end else begin
       scratchVal_Accum <= {16'hAAAA, scratchVal_FS[15:0]} + addVal_FS;
     end
