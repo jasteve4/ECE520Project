@@ -25,8 +25,8 @@ module Top(
 
 
   wire input_base_offset, output_base_offset;
-  wire output_start, input_start, cdf_start;
-  wire output_done,input_done, cdf_done;
+  wire output_start, input_start;
+  wire output_done,input_done;
   wire [19:0] cdf_min, cdf_min_out, divisor;
   wire cdf_valid;
 
@@ -65,18 +65,14 @@ module Top(
     .cdf_valid(cdf_valid)
     );
 
-
-
   Controllor dut_Controller(
     .clock(clock),
     .reset_n(reset_n),
     .start(start),
     .output_start(output_start),
-    .cdf_start(cdf_start),
     .input_start(input_start),
     .input_done(input_done),
     .output_done(output_done),
-    .cdf_done(cdf_done),
     .Cdf_Min(cdf_min),
     .Cdf_Min_Out(cdf_min_out),
     .Divisor(divisor),
@@ -84,9 +80,26 @@ module Top(
     .output_base_offset(output_base_offset),
     .cdf_valid(cdf_valid)
     );
+/*
+  Cdf_top dut_CDF_top(
+    .clock(clock),
+    .reset_n(reset_n),
+    .start(cdf_start),
+    .SP_ReadBus(M2_ReadBus1),
+    .SP_ReadAddress(M2_ReadAddress1),
+    .WriteEnable(M2_WriteEnable),
+    .Output_MEMBus(M2_WriteBus),
+    .Output_MEMAddress(M2_WriteAddress),
+    .Cdf_Min(cdf_min),
+    .done(cdf_done),
+    .input_base_offset(input_base_offset),
+    .cdf_valid(cdf_valid)
+    );
+*/
 
 //The below module is the first module in the overall pipeline
 //This counts how many times each pixel value occurs
+
   input_pipeline dut_Input_Pipeline(
     .start(input_start), 
     .clock(clock), 
@@ -99,7 +112,9 @@ module Top(
     .m2WriteAddr_out(M2_WriteAddress), 
     .m2WriteVal_out(M2_WriteBus),
     .m2WE_out(M2_WriteEnable),
-    .done(input_done)
-  );
+    .done(input_done),
+    .cdf_valid(cdf_valid),
+    .Cdf_Min(cdf_min)
+    );
 
 endmodule
