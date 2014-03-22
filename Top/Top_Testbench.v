@@ -42,13 +42,14 @@ module Top_Testbench();
   always #5 clock = ~clock;
 
   initial begin
-    $readmemh("cdr_input.txt",m2.Register);
-    $readmemh("input_wiki.txt",m3.Register);
+    $readmemh("input_wiki.txt",m1.Register);
     #10 reset_n = 0;
     #10 reset_n = 1;
     #20 start = 1;
-    #1000  
+    #3300 
+    #1500
     $writememh("./output/outputM2.txt",m2.Register);
+    $writememh("./output/outputM3.txt",m3.Register);
     $writememh("./output/outputM4.txt",m4.Register);
     $finish;
   end

@@ -21,16 +21,19 @@ module Cdf_top(
   wire                start_to_store;
 
 
+
+
   Cdf_Fetch stage1 (
     .clock(clock),
     .reset_n(reset_n),
     .start(start),
     .ReadBus(SP_ReadBus),
-    .ReadAddress(SP_ReadAddress),
+    .ReadAddr(SP_ReadAddress),
     .AccumlateOut(Accumlate),
     .StartOut(start_to_accumlate),
     .StoreAddress(store_address),
-    .input_base_offset(input_base_offset)
+    .input_base_offset(input_base_offset),
+    .done(done)
     );
 
   Cdf_Accumlate stage2(
@@ -54,8 +57,7 @@ module Cdf_top(
     .StoreAddressIn(store_address_to_store),
     .WriteBus(Output_MEMBus),
     .WriteAddress(Output_MEMAddress),
-    .WriteEnable(WriteEnable),
-    .done(done)
+    .WriteEnable(WriteEnable)
   );
 
 endmodule

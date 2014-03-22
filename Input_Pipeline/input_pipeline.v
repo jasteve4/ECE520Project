@@ -17,11 +17,24 @@ module input_pipeline(
   input wire start, clock, rst_n,
   input wire [127:0] m1ReadVal, m2ReadVal,
   input wire inputBaseOffset,
-  output reg [15:0] m1ReadAddr, m2ReadAddr, m2WriteAddr, 
-  output reg [127:0] m2WriteVal,
-  output reg m2WE,
+  output reg [15:0] m1ReadAddr, 
+  output wire [15:0] m2ReadAddr_out, 
+  output wire [15:0] m2WriteAddr_out, 
+  output wire [127:0] m2WriteVal_out,
+  output wire m2WE_out,
   output reg done
 );
+
+reg m2WE;
+reg [15:0] m2WriteAddr;
+reg [15:0] m2ReadAddr;
+reg [127:0] m2WriteVal;
+
+
+assign m2WE_out = (m2WE) ? 1'b1 : 1'bz;
+assign m2WriteAddr_out = (m2WE) ? m2WriteAddr : 16'bz;
+assign m2WriteVal_out = (m2WE) ? m2WriteVal : 16'bz;
+assign m2ReadAddr_out = (start) ? m2ReadAddr : 16'bz;
 
 //NEEDED PARAMETERS
 parameter ADDRESS_OF_LAST = 3;

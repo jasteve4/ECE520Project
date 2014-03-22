@@ -96,7 +96,7 @@ module Controllor(
                   begin
                     input_start <= 1'd0;
                     output_start <= 1'd0;
-                    cdf_start <= 1'd1;
+                    cdf_start <= 1'd0;
                     State <= BEGIN_CDF; 
                   end
                 else
