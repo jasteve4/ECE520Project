@@ -25,7 +25,8 @@ initial begin
   rst_n = 0;
   start = 0;
   inputBaseOffset = 0;
-  $readmemh("input_wiki.txt",m1.Register);
+  //$readmemh("input_wiki.txt",m1.Register);
+  $readmemh("input_oneColor.txt",m1.Register);
   
   #30
   rst_n = 1;
@@ -40,9 +41,9 @@ initial begin
 end
 
 input_pipeline dut1 ( .start(start), .clock(clock), .rst_n(rst_n),
-      .m1ReadVal(ReadBus1), .m2ReadVal(ReadBus2), .inputBaseOffset(inputBaseOffset), .m1ReadAddr(ReadAddress1), 
+      .m1ReadBus(ReadBus1), .m2ReadBus(ReadBus2), .inputBaseOffset(inputBaseOffset), .m1ReadAddr(ReadAddress1), 
       .m2ReadAddr(ReadAddress2), .m2WriteAddr(WriteAddress2), 
-      .m2WriteVal(WriteBus2), .m2WE(WE2), .done(done));
+      .m2WriteBus(WriteBus2), .m2WE(WE2), .done(done));
 
 sram_2R1W m1(.clock(clock), .WE(WE1), .WriteAddress(WriteAddress1), .ReadAddress1(ReadAddress1), 
         .ReadAddress2(), .WriteBus(WriteBus1), .ReadBus1(ReadBus1), .ReadBus2());
