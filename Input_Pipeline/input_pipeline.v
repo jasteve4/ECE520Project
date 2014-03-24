@@ -15,31 +15,21 @@ m4 = output memory
 ========================================*/
 module input_pipeline(
   input wire start, clock, rst_n,
-  input wire [127:0] m1ReadVal, m2ReadVal,
+  input wire [127:0] m1ReadBus, m2ReadBus,
   input wire inputBaseOffset,
-  output reg [15:0] m1ReadAddr, 
-  output wire [15:0] m2ReadAddr_out, 
-  output wire [15:0] m2WriteAddr_out, 
-  output wire [127:0] m2WriteVal_out,
-  output wire m2WE_out,
-  output reg done
+  output wire [15:0] m1ReadAddr, 
+  output wire [15:0] m2ReadAddr, 
+  output wire [15:0] m2WriteAddr, 
+  output wire [127:0] m2WriteBus,
+  output wire m2WE,
+  output wire done
 );
 
-reg m2WE;
-reg [15:0] m2WriteAddr;
-reg [15:0] m2ReadAddr;
-reg [127:0] m2WriteVal;
 
-
-assign m2WE_out = (m2WE) ? 1'b1 : 1'bz;
-assign m2WriteAddr_out = (m2WE) ? m2WriteAddr : 16'bz;
-assign m2WriteVal_out = (m2WE) ? m2WriteVal : 16'bz;
-assign m2ReadAddr_out = (start) ? m2ReadAddr : 16'bz;
-
-//NEEDED PARAMETERS
+//=====================NEEDED PARAMETERS=====================
 parameter ADDRESS_OF_LAST = 3;
 
-//PIPELINE STATES
+//======================PIPELINE STATES======================
 parameter [2:0]
   RESET = 3'b000,
   GET_VALUES = 3'b001,
@@ -49,182 +39,119 @@ parameter [2:0]
   FINAL_LOAD2 = 3'b101, 
   DONE = 3'b110;
 
+//===================Pipeline Registers=====================
+reg write_enable, m2WE_FI, m2WE_FS, m2WE_Accum;
+reg [15:0] readInitial_FI, readInitial_FS, readInitial_Accum;
+reg [35:0] scratchVal_FS, scratchVal_Accum;
+reg done_FI, done_FS, done_Accum, done_enable;
+reg [6:0] pipelineCounter;
+reg [15:0] memoryCounter;
 
-reg [6:0] pipelineCounter, pipelineCounterFF;
-reg [15:0] memoryCounter, memoryCounterFF;
-
-//pipeline registers
-reg [7:0] readVal_FI, readVal_FS, readVal_Accum;
-reg [31:0] scratchVal_FS, scratchVal_Accum;
-reg [1:0] addVal_FI, addVal_FS;
-reg m2WE_FI, m2WE_FS, m2WE_Accum, write_enable;
-reg done_FI, done_FS, done_enable;
+//===================MISC Wires and Regs===================
+wire [15:0] m1ReadBus_Wire;
+wire [35:0] m2ReadBus_Wire;
 reg [2:0] cstate, nstate;
 
-always@(posedge clock) begin
+//===================Inter-Pipeline Logic===================
+
+
+//===================Write To Memory=======================
+
+assign m1ReadBus_Wire = {inputBaseOffset, 7'b0, m1ReadBus[pipelineCounter+:8'd8]};
+assign m1ReadAddr = memoryCounter;
+
+assign m2ReadBus_Wire = m2ReadBus[35:0];
+assign m2ReadAddr = readInitial_FI;
+
+assign m2WE = m2WE_Accum;
+assign m2WriteAddr = readInitial_Accum;
+assign m2WriteBus = scratchVal_Accum;
+
+assign done = done_Accum;
+
+//===================Pipeline====================
+always@(posedge clock or negedge rst_n) begin
   if(!rst_n && !start) begin
-      m1ReadAddr <= 0;
-      m2ReadAddr <= 0;
-      m2WriteAddr <= 0;
-      m2WriteVal <= 0;
-      readVal_FI <= 0;
-      readVal_FS <= 0;
-      readVal_Accum <= 0;
-      scratchVal_FS <= 0;
-      scratchVal_Accum <= 0;
+      readInitial_FI <= 0;
+      readInitial_FS <= 0;
+      readInitial_Accum <= 0;
+      scratchVal_FS <= 36'hAAAA00000;
+      scratchVal_Accum <= 36'hAAAA00000;
       m2WE_FI <= 1'b0;
       m2WE_FS <= 1'b0;
       m2WE_Accum <= 1'b0;
-      m2WE <= 1'b0;
       done_FI <= 1'b0;
       done_FS <= 1'b0;
-      done <= 1'b0;
+      done_Accum <= 1'b0;    
   end else begin
-    //===============Fetch Initial(FI) Stage=========================
-    m1ReadAddr <= memoryCounterFF;
-    readVal_FI <= m1ReadVal[pipelineCounterFF+:8'd8];
-    m2WE_FI <= write_enable;
+    //Fetch Initial Memory
     done_FI <= done_enable;
-    m2ReadAddr <= {inputBaseOffset,m1ReadVal[pipelineCounterFF+:8'd8]};
-    
-    if(m2WE &&(m2WriteAddr == m1ReadVal[pipelineCounterFF+:8'd8])) begin
-      addVal_FI <= 2'd2;
-    end else begin
-      addVal_FI <= 2'b1;
-    end
+    m2WE_FI <= write_enable;
+    readInitial_FI <= m1ReadBus_Wire;
 
-    //===============Fetch ScatchPad(FS) Stage=======================
-    readVal_FS <= readVal_FI;
-    addVal_FS <= addVal_FI;
-    m2WE_FS <= m2WE_FI;
+    //Fetch Scratchpad Value
     done_FS <= done_FI;
-
-    if(m2WE && (readVal_FI == m2WriteAddr)) begin
-      scratchVal_FS <= m2WriteVal;
-    end else begin
-      if(m2ReadVal[31:16] == 16'hAAAA) begin
-        scratchVal_FS <= m2ReadVal;
-      end else begin
-        scratchVal_FS <= 32'hAAAA0000;
-      end
-    end
-
-    //===============Accumulate Stage (Accum)========================
-    readVal_Accum <= readVal_FS;
-    m2WE_Accum <= m2WE_FS;
-    done <= done_FS;
-
-    if(m2WE && (m2WriteAddr == readVal_FS)) begin
-      scratchVal_Accum <= m2WriteVal + addVal_FS; 
-    end else begin
-      scratchVal_Accum <= {16'hAAAA, scratchVal_FS[15:0]} + addVal_FS;
-    end
-
-    //===============Store ScratchPad (SS)===========================
-    m2WriteAddr <= {inputBaseOffset,readVal_Accum};
-    m2WE <= m2WE_Accum;
-    m2WriteVal <= scratchVal_Accum;
-  end
-end
-
-always@(cstate or start or pipelineCounterFF) begin
-  case(cstate)
-    RESET: begin
-      pipelineCounter <= 8'b0;
-      memoryCounter <= 16'b0;
-      done_enable <= 1'b0;
-      write_enable <= 1'b0;
-
-      if(start) begin
-        nstate <= GET_VALUES;
-      end else begin
-        nstate <= RESET;
-      end
-    end
-
-    GET_VALUES: begin
-      pipelineCounter <= pipelineCounter + 4'd8;
-      memoryCounter <= memoryCounter;
-      done_enable <= 1'b0;
-      write_enable <= 1'b1;
-
-      if(pipelineCounter < 8'd104) begin
-        nstate <= GET_VALUES;
-      end else begin
-        nstate <= LOAD_NEXT;
-      end
-    end
-
-    LOAD_NEXT: begin
-      pipelineCounter <= pipelineCounter + 4'd8;
-      memoryCounter <= memoryCounter + 16'd1;
-      done_enable <= 1'b0;
-      write_enable <= 1'b1;
-      
-      nstate <= GET_LAST_VAL;
-    end
-
-    GET_LAST_VAL: begin
-      pipelineCounter <= pipelineCounter + 4'd8;
-      memoryCounter <= memoryCounter;
-      done_enable <= 1'b0;
-      write_enable <= 1'b1;
-
-      if(memoryCounter < 3) begin
-        nstate <= GET_VALUES;
-      end else begin
-        nstate <= FINAL_LOAD1;
-      end
-    end
-
-    FINAL_LOAD1: begin
-      pipelineCounter <= pipelineCounter + 8'd8;
-      memoryCounter <= memoryCounter;
-      done_enable <= 1'b0;
-      write_enable <= 1'b1;
-      nstate <= FINAL_LOAD2;
-    end
-
-    FINAL_LOAD2: begin
-      pipelineCounter <= pipelineCounter + 8'd8;
-      memoryCounter <= memoryCounter;
-      done_enable <= 1'b0;
-      write_enable <= 1'b1;
-      
-      if(pipelineCounter < 8'd120) begin
-        nstate <= FINAL_LOAD2;
-      end else begin
-        nstate <= DONE;
-      end
-    end
-
-    DONE: begin
-      pipelineCounter <= pipelineCounter;
-      memoryCounter <= memoryCounter;
-      done_enable <= 1'b1;
-      write_enable <= 1'b0;
-      if(start) begin
-        nstate <= DONE;
-      end else begin
-        nstate <= RESET;
-      end
-    end
-
-    default: begin
-      nstate <= RESET;
-    end
-  endcase
-end
-
-always@(posedge clock or negedge rst_n) begin   
-  if(!rst_n) begin            //Synchronous Active Low Reset
-    cstate <= RESET;
-  end else begin
-    cstate <= nstate;
-  end
+    m2WE_FS <= m2WE_FI;
+    readInitial_FS <= readInitial_FI;
   
-  pipelineCounterFF <= pipelineCounter;
-  memoryCounterFF <= memoryCounter;
+    if(m2WE_Accum && (readInitial_FI == readInitial_Accum)) begin
+      scratchVal_FS <= scratchVal_Accum;
+    end else begin
+      if(m2ReadBus_Wire[35:20] == 16'hAAAA) begin
+        scratchVal_FS <= m2ReadBus_Wire;
+      end else begin
+        scratchVal_FS <= 36'hAAAA00000;
+      end
+    end
+
+    //Accumulate Pixel Count
+    done_Accum <= done_FS;
+    m2WE_Accum <= m2WE_FS;
+    readInitial_Accum <= readInitial_FS;
+  
+    if(m2WE_Accum && (readInitial_FS == readInitial_Accum)) begin
+      scratchVal_Accum <= scratchVal_Accum + 1'b1;
+    end else begin
+      scratchVal_Accum <= scratchVal_FS + 1'b1;
+    end
+  end
+end
+
+//======================Pipeline Controller/State Machine===================
+
+always@(posedge clock or negedge rst_n) begin
+  if(!rst_n) begin
+    memoryCounter <= 0;
+    pipelineCounter <= 0;
+    write_enable <= 1'b0;
+    done_enable <= 1'b0;
+  end else begin
+    if(start & (pipelineCounter != 127'd120)) begin
+      memoryCounter <= memoryCounter;
+      pipelineCounter <= pipelineCounter + 127'd8;
+      write_enable <= 1'b1;
+      done_enable <= 1'b0;
+    end else begin
+      if(start & (pipelineCounter == 127'd120)) begin
+        if(memoryCounter[14:0] == 15'd3) begin
+          memoryCounter <= memoryCounter;
+          pipelineCounter <= pipelineCounter;
+          write_enable <= 1'b0;
+          done_enable <= 1'b1;
+        end else begin
+          memoryCounter <= memoryCounter + 1'b1;
+          pipelineCounter <= 127'b0;
+          write_enable <= 1'b1;
+          done_enable <= 1'b0;
+        end
+      end else begin
+        pipelineCounter <= 127'b0;
+        memoryCounter <= 15'b0;
+        write_enable <= 1'b1;
+        done_enable <= 1'b0;
+      end
+    end
+  end
 end
 
 endmodule
