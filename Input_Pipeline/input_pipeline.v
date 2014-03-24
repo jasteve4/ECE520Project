@@ -50,7 +50,6 @@ reg [15:0] memoryCounter;
 //===================MISC Wires and Regs===================
 wire [15:0] m1ReadBus_Wire;
 wire [35:0] m2ReadBus_Wire;
-reg [2:0] cstate, nstate;
 
 //===================Inter-Pipeline Logic===================
 
