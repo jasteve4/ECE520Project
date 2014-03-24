@@ -4,11 +4,9 @@ module Controllor(
   input wire reset_n,
   input wire start,
   output reg output_start,
-  output reg cdf_start,
   output reg input_start,
   input wire input_done,
   input wire output_done,
-  input wire cdf_done,
   input wire [19:0] Cdf_Min,
   output reg [19:0] Cdf_Min_Out,
   output reg [19:0] Divisor,
@@ -62,7 +60,6 @@ module Controllor(
         begin
           input_start <= 1'd0;
           output_start <= 1'd0;
-          cdf_start <= 1'd0;
           State <= INITIAL;
           input_base_offset <= 1'd0;
           output_base_offset <= 1'd0;
@@ -76,14 +73,12 @@ module Controllor(
                   begin
                     input_start <= 1'd1;
                     output_start <= 1'd0;
-                    cdf_start <= 1'd0;
                     State <= BEGIN;
                   end
                 else
                   begin
                     input_start <= 1'd0;
                     output_start <= 1'd0;
-                    cdf_start <= 1'd0;
                     State <= INITIAL; 
                   end
                   RepeatState <= REPEAT_START;
@@ -96,41 +91,17 @@ module Controllor(
                   begin
                     input_start <= 1'd0;
                     output_start <= 1'd0;
-                    cdf_start <= 1'd0;
-                    State <= BEGIN_CDF; 
+                    State <= REPEAT; 
                   end
                 else
                   begin
                     input_start <= 1'd1;
                     output_start <= 1'd0;
-                    cdf_start <= 1'd0;
                     State <= BEGIN; 
                   end
                   RepeatState <= REPEAT_START;
                   input_base_offset <= 1'd0;
                   output_base_offset <= 1'd0;
-              end
-            BEGIN_CDF:
-              begin
-                if(cdf_done)
-                  begin
-                    input_start <= 1'd1;
-                    output_start <= 1'd1;
-                    cdf_start <= 1'd0;
-                    State <= REPEAT; 
-                    input_base_offset <= 1'd1;
-                    output_base_offset <= 1'd0;
-                  end
-                else
-                  begin
-                    input_start <= 1'd0;
-                    output_start <= 1'd0;
-                    cdf_start <= 1'd1;
-                    State <= BEGIN_CDF; 
-                    input_base_offset <= 1'd0;
-                    output_base_offset <= 1'd0;
-                  end
-                  RepeatState <= REPEAT_START;
               end
             REPEAT:
               begin
@@ -141,14 +112,12 @@ module Controllor(
                         begin
                           input_start <= 1'd0; 
                           output_start <= 1'd1;
-                          cdf_start <= 1'd1;
                           RepeatState <= WAIT_FOR_OUTPUT;
                         end
                       else
                         begin
                           input_start <= 1'd1; 
                           output_start <= 1'd1;
-                          cdf_start <= 1'd0;
                           RepeatState <= REPEAT_START;
                         end
                         input_base_offset <= input_base_offset;
@@ -156,29 +125,18 @@ module Controllor(
                     end
                   WAIT_FOR_OUTPUT:
                     begin
-                      if(output_done & cdf_done)
+                      if(output_done)
                         begin
                           input_start <= 1'd0; 
                           output_start <= 1'd0;
-                          cdf_start <= 1'd0;
                           RepeatState <= REPEAT_START;
                           input_base_offset <= ~input_base_offset;
                           output_base_offset <= ~output_base_offset;
-                        end
-                      else if(cdf_done)
-                        begin
-                          input_start <= 1'd0; 
-                          output_start <= 1'd1;
-                          cdf_start <= 1'd0;
-                          RepeatState <= WAIT_FOR_OUTPUT;
-                          input_base_offset <= input_base_offset;
-                          output_base_offset <= output_base_offset;
                         end
                       else
                         begin
                           input_start <= 1'd0; 
                           output_start <= 1'd1;
-                          cdf_start <= 1'd1;
                           RepeatState <= WAIT_FOR_OUTPUT;
                           input_base_offset <= input_base_offset;
                           output_base_offset <= output_base_offset;

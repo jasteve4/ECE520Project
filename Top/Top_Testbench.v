@@ -43,11 +43,13 @@ module Top_Testbench();
 
   initial begin
     $readmemh("input_wiki.txt",m1.Register);
+    $readmemh("input_wiki.txt",m3.Register);
     #10 reset_n = 0;
     #10 reset_n = 1;
     #20 start = 1;
     #3300 
     #1500
+    #5000
     $writememh("./output/outputM2.txt",m2.Register);
     $writememh("./output/outputM3.txt",m3.Register);
     $writememh("./output/outputM4.txt",m4.Register);
