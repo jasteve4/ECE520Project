@@ -70,7 +70,7 @@ assign done = done_Accum;
 
 //===================Pipeline====================
 always@(posedge clock or negedge rst_n) begin
-  if(!rst_n && !start) begin
+  if(!rst_n) begin
       readInitial_FI <= 0;
       readInitial_FS <= 0;
       readInitial_Accum <= 0;
@@ -81,37 +81,51 @@ always@(posedge clock or negedge rst_n) begin
       m2WE_Accum <= 1'b0;
       done_FI <= 1'b0;
       done_FS <= 1'b0;
-      done_Accum <= 1'b0;    
-  end else begin
-    //Fetch Initial Memory
-    done_FI <= done_enable;
-    m2WE_FI <= write_enable;
-    readInitial_FI <= m1ReadBus_Wire;
+      done_Accum <= 1'b0;   
+  end else begin 
+    if(start) begin
+      //Fetch Initial Memory
+      done_FI <= done_enable;
+      m2WE_FI <= write_enable;
+      readInitial_FI <= m1ReadBus_Wire;
 
-    //Fetch Scratchpad Value
-    done_FS <= done_FI;
-    m2WE_FS <= m2WE_FI;
-    readInitial_FS <= readInitial_FI;
+      //Fetch Scratchpad Value
+      done_FS <= done_FI;
+      m2WE_FS <= m2WE_FI;
+      readInitial_FS <= readInitial_FI;
   
-    if(m2WE_Accum && (readInitial_FI == readInitial_Accum)) begin
-      scratchVal_FS <= scratchVal_Accum;
-    end else begin
-      if(m2ReadBus_Wire[35:20] == 16'hAAAA) begin
-        scratchVal_FS <= m2ReadBus_Wire;
+      if(m2WE_Accum && (readInitial_FI == readInitial_Accum)) begin
+        scratchVal_FS <= scratchVal_Accum;
       end else begin
-        scratchVal_FS <= 36'hAAAA00000;
+        if(m2ReadBus_Wire[35:20] == 16'hAAAA) begin
+          scratchVal_FS <= m2ReadBus_Wire;
+        end else begin
+          scratchVal_FS <= 36'hAAAA00000;
+        end
       end
-    end
 
-    //Accumulate Pixel Count
-    done_Accum <= done_FS;
-    m2WE_Accum <= m2WE_FS;
-    readInitial_Accum <= readInitial_FS;
+      //Accumulate Pixel Count
+      done_Accum <= done_FS;
+      m2WE_Accum <= m2WE_FS;
+      readInitial_Accum <= readInitial_FS;
   
-    if(m2WE_Accum && (readInitial_FS == readInitial_Accum)) begin
-      scratchVal_Accum <= scratchVal_Accum + 1'b1;
+      if(m2WE_Accum && (readInitial_FS == readInitial_Accum)) begin
+        scratchVal_Accum <= scratchVal_Accum + 1'b1;
+      end else begin
+        scratchVal_Accum <= scratchVal_FS + 1'b1;
+      end
     end else begin
-      scratchVal_Accum <= scratchVal_FS + 1'b1;
+      readInitial_FI <= 0;
+      readInitial_FS <= 0;
+      readInitial_Accum <= 0;
+      scratchVal_FS <= 36'hAAAA00000;
+      scratchVal_Accum <= 36'hAAAA00000;
+      m2WE_FI <= 1'b0;
+      m2WE_FS <= 1'b0;
+      m2WE_Accum <= 1'b0;
+      done_FI <= 1'b0;
+      done_FS <= 1'b0;
+      done_Accum <= 1'b0;   
     end
   end
 end
