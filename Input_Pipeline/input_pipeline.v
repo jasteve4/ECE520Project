@@ -22,7 +22,9 @@ module input_pipeline(
   output wire [15:0] m2WriteAddr, 
   output wire [127:0] m2WriteBus,
   output wire m2WE,
-  output wire done
+  output wire done,
+  output wire [19:0] Cdf_min,
+  output wire cdf_valid
 );
 
 
@@ -50,7 +52,7 @@ reg [15:0] memoryCounter;
 //===================MISC Wires and Regs===================
 wire [15:0] m1ReadBus_Wire;
 wire [35:0] m2ReadBus_Wire;
-
+wire input_done;
 //===================Inter-Pipeline Logic===================
 
 
@@ -66,7 +68,7 @@ assign m2WE = m2WE_Accum;
 assign m2WriteAddr = readInitial_Accum;
 assign m2WriteBus = scratchVal_Accum;
 
-assign done = done_Accum;
+assign input_done = done_Accum;
 
 //===================Pipeline====================
 always@(posedge clock or negedge rst_n) begin
@@ -166,5 +168,22 @@ always@(posedge clock or negedge rst_n) begin
     end
   end
 end
+
+//========================Calculate the CDF================================
+  Cdf_top dut_CDF_top(
+    .clock(clock),
+    .reset_n(rst_n),
+    .start(input_done),
+    .SP_ReadBus(M2_ReadBus1),
+    .SP_ReadAddress(M2_ReadAddress1),
+    .WriteEnable(M2_WriteEnable),
+    .Output_MEMBus(M2_WriteBus),
+    .Output_MEMAddress(M2_WriteAddress),
+    .Cdf_Min(cdf_min),
+    .done(done),
+    .input_base_offset(input_base_offset),
+    .cdf_valid(cdf_valid)
+  );
+
 
 endmodule
