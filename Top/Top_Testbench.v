@@ -50,6 +50,7 @@ module Top_Testbench();
     #3300 
     #1500
     #5000
+    $writememh("./output/outputM1.txt",m1.Register);
     $writememh("./output/outputM2.txt",m2.Register);
     $writememh("./output/outputM3.txt",m3.Register);
     $writememh("./output/outputM4.txt",m4.Register);

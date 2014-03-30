@@ -24,11 +24,12 @@ always #5 clock = ~clock;
 initial begin
   //$monitor("WriteBus: %h, ReadVal: %h, Done: %d", WriteBus2, WriteAddress2, done);
   clock = 0;
-  rst_n = 0;
+  rst_n = 1;
   start = 0;
   inputBaseOffset = 0;
-  //$readmemh("input_wiki.txt",m1.Register);
-  $readmemh("input_oneColor.txt",m1.Register);
+  #10 rst_n = 0;
+  $readmemh("input_wiki.txt",m1.Register);
+  //$readmemh("input_oneColor.txt",m1.Register);
   
   #30
   rst_n = 1;
