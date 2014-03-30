@@ -10,6 +10,8 @@ wire [127:0] WriteBus1, WriteBus2,
             WriteBus3, WriteBus4;
 wire [127:0] ReadBus1, ReadBus2, 
               ReadBus3, ReadBus4;
+wire [19:0] cdf_min;
+wire cdf_valid;
 wire done;
 
 reg inputBaseOffset;
@@ -31,7 +33,7 @@ initial begin
   #30
   rst_n = 1;
   #10 start = 1;
-  #800
+  #4000
   start = 0;
   #20
   $writememh("./output/outputM1.txt",m1.Register);
@@ -43,7 +45,7 @@ end
 input_pipeline dut1 ( .start(start), .clock(clock), .rst_n(rst_n),
       .m1ReadBus(ReadBus1), .m2ReadBus(ReadBus2), .inputBaseOffset(inputBaseOffset), .m1ReadAddr(ReadAddress1), 
       .m2ReadAddr(ReadAddress2), .m2WriteAddr(WriteAddress2), 
-      .m2WriteBus(WriteBus2), .m2WE(WE2), .done(done));
+      .m2WriteBus(WriteBus2), .m2WE(WE2), .done(done), .cdf_min(cdf_min), .cdf_valid(cdf_valid));
 
 sram_2R1W m1(.clock(clock), .WE(WE1), .WriteAddress(WriteAddress1), .ReadAddress1(ReadAddress1), 
         .ReadAddress2(), .WriteBus(WriteBus1), .ReadBus1(ReadBus1), .ReadBus2());
