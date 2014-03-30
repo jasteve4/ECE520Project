@@ -23,7 +23,7 @@ module input_pipeline(
   output wire [127:0] m2WriteBus,
   output wire m2WE,
   output wire done,
-  output wire [19:0] Cdf_min,
+  output wire [19:0] cdf_min,
   output wire cdf_valid
 );
 
@@ -52,6 +52,9 @@ reg [15:0] memoryCounter;
 //===================MISC Wires and Regs===================
 wire [15:0] m1ReadBus_Wire;
 wire [35:0] m2ReadBus_Wire;
+wire [15:0] CDF_m2ReadAddr, CDF_m2WriteAddr;
+wire [127:0] CDF_m2WriteBus;
+wire CDF_m2WE;
 wire input_done;
 //===================Inter-Pipeline Logic===================
 
@@ -62,11 +65,11 @@ assign m1ReadBus_Wire = {inputBaseOffset, 7'b0, m1ReadBus[pipelineCounter+:8'd8]
 assign m1ReadAddr = memoryCounter;
 
 assign m2ReadBus_Wire = m2ReadBus[35:0];
-assign m2ReadAddr = readInitial_FI;
+assign m2ReadAddr = input_done ? CDF_m2ReadAddr : readInitial_FI;
 
-assign m2WE = m2WE_Accum;
-assign m2WriteAddr = readInitial_Accum;
-assign m2WriteBus = scratchVal_Accum;
+assign m2WE = input_done ? CDF_m2WE : m2WE_Accum;
+assign m2WriteAddr = input_done ? CDF_m2WriteAddr : readInitial_Accum;
+assign m2WriteBus = input_done ? CDF_m2WriteBus : scratchVal_Accum;
 
 assign input_done = done_Accum;
 
@@ -174,11 +177,11 @@ end
     .clock(clock),
     .reset_n(rst_n),
     .start(input_done),
-    .SP_ReadBus(M2_ReadBus1),
-    .SP_ReadAddress(M2_ReadAddress1),
-    .WriteEnable(M2_WriteEnable),
-    .Output_MEMBus(M2_WriteBus),
-    .Output_MEMAddress(M2_WriteAddress),
+    .SP_ReadBus(m2ReadBus),
+    .SP_ReadAddress(CDF_m2ReadAddr),
+    .WriteEnable(CDF_m2WE),
+    .Output_MEMBus(CDF_m2WriteBus),
+    .Output_MEMAddress(CDF_m2WriteAddr),
     .Cdf_Min(cdf_min),
     .done(done),
     .input_base_offset(input_base_offset),
