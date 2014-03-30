@@ -184,7 +184,7 @@ end
     .Output_MEMAddress(CDF_m2WriteAddr),
     .Cdf_Min(cdf_min),
     .done(done),
-    .input_base_offset(input_base_offset),
+    .input_base_offset(inputBaseOffset),
     .cdf_valid(cdf_valid)
   );
 
