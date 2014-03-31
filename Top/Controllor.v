@@ -21,7 +21,7 @@ module Controllor(
   parameter REPEAT          = 2'd3;
   parameter WAIT_FOR_OUTPUT = 1'd1;
   parameter REPEAT_START    = 1'd0;
-  parameter DIVIDEND        = 20'd64;
+  parameter DIVIDEND        = 20'd307200;
 
   reg [19:0] cdf_min1;
   reg [19:0] cdf_min0;
