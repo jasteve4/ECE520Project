@@ -29,7 +29,7 @@ module input_pipeline(
 
 
 //=====================NEEDED PARAMETERS=====================
-parameter ADDRESS_OF_LAST = 3;
+parameter ADDRESS_OF_LAST = 15'd19199;
 
 //======================PIPELINE STATES======================
 parameter [2:0]
@@ -47,7 +47,7 @@ reg [15:0] readInitial_FI, readInitial_FS, readInitial_Accum;
 reg [35:0] scratchVal_FS, scratchVal_Accum;
 reg done_FI, done_FS, done_Accum, done_enable;
 reg [6:0] pipelineCounter;
-reg [15:0] memoryCounter;
+reg [14:0] memoryCounter;
 
 //===================MISC Wires and Regs===================
 wire [15:0] m1ReadBus_Wire;
@@ -61,8 +61,8 @@ wire input_done;
 
 //===================Write To Memory=======================
 
-assign m1ReadBus_Wire = {inputBaseOffset, 7'b0, m1ReadBus[pipelineCounter+:8'd8]};
-assign m1ReadAddr = memoryCounter;
+assign m1ReadBus_Wire = m1ReadBus[pipelineCounter+:8'd8];
+assign m1ReadAddr = {inputBaseOffset,memoryCounter};
 
 assign m2ReadBus_Wire = m2ReadBus[35:0];
 assign m2ReadAddr = input_done ? CDF_m2ReadAddr : readInitial_FI;
@@ -151,7 +151,7 @@ always@(posedge clock or negedge rst_n) begin
       done_enable <= 1'b0;
     end else begin
       if(start & (pipelineCounter == 127'd120)) begin
-        if(memoryCounter[14:0] == 15'd3) begin
+        if(memoryCounter[14:0] == ADDRESS_OF_LAST) begin
           memoryCounter <= memoryCounter;
           pipelineCounter <= pipelineCounter;
           write_enable <= 1'b0;
@@ -184,7 +184,7 @@ end
     .Output_MEMAddress(CDF_m2WriteAddr),
     .Cdf_Min(cdf_min),
     .done(done),
-    .input_base_offset(input_base_offset),
+    .input_base_offset(inputBaseOffset),
     .cdf_valid(cdf_valid)
   );
 

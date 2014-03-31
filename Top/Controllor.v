@@ -21,6 +21,7 @@ module Controllor(
   parameter REPEAT          = 2'd3;
   parameter WAIT_FOR_OUTPUT = 1'd1;
   parameter REPEAT_START    = 1'd0;
+  parameter DIVIDEND        = 20'd307200;
 
   reg [19:0] cdf_min1;
   reg [19:0] cdf_min0;
@@ -32,12 +33,12 @@ module Controllor(
       if(output_base_offset)
         begin
           Cdf_Min_Out <= cdf_min1;
-          Divisor <= 20'd307200 - cdf_min1;
+          Divisor <= DIVIDEND - cdf_min1;
         end
       else
         begin
           Cdf_Min_Out <= cdf_min0;
-          Divisor <= 20'd307200 - cdf_min0;
+          Divisor <= DIVIDEND - cdf_min0;
         end
     end
 
