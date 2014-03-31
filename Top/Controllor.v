@@ -111,13 +111,13 @@ module Controllor(
                     begin
                       if(input_done)
                         begin
-                          input_start <= 1'd0; 
+                          input_start <= 1'd0; // change for all run 
                           output_start <= 1'd1;
                           RepeatState <= WAIT_FOR_OUTPUT;
                         end
                       else
                         begin
-                          input_start <= 1'd1; 
+                          input_start <= 1'd0; 
                           output_start <= 1'd1;
                           RepeatState <= REPEAT_START;
                         end
@@ -130,7 +130,7 @@ module Controllor(
                         begin
                           input_start <= 1'd0; 
                           output_start <= 1'd0;
-                          RepeatState <= REPEAT_START;
+                          RepeatState <= WAIT_FOR_OUTPUT;
                           input_base_offset <= ~input_base_offset;
                           output_base_offset <= ~output_base_offset;
                         end

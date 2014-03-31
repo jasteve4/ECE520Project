@@ -39,7 +39,7 @@ module Top_Testbench();
   wire done;
 
 
-  always #3 clock = ~clock;
+  always #2 clock = ~clock;
 
   initial begin
     $readmemh("input_small_hex.txt",m1.Register);
@@ -47,7 +47,7 @@ module Top_Testbench();
     #10 reset_n = 0;
     #10 reset_n = 1;
     #20 start = 1;
-    #4000000000
+    #3000000
     $writememh("./output/outputM1.txt",m1.Register);
     $writememh("./output/outputM2.txt",m2.Register);
     $writememh("./output/outputM3.txt",m3.Register);

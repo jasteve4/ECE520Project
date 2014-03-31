@@ -13,7 +13,7 @@ module Output_Fetch_MEM(
 
   reg [3:0]           short_count;
   reg [127:0]           data_in;
-  reg done0, done1, done2, done3, done4, done5;
+  reg done0, done1, done2, done3, done4, done5, done6, done7, done8;
 
   always@(posedge clock or negedge reset_n)
     begin
@@ -25,6 +25,9 @@ module Output_Fetch_MEM(
           done3 <= 1'd0;
           done4 <= 1'd0;
           done5 <= 1'd0;
+          done6 <= 1'd0;
+          done7 <= 1'd0;
+          done8 <= 1'd0;
           done <= 1'd0;
         end
       else
@@ -35,7 +38,10 @@ module Output_Fetch_MEM(
           done3 <= done2;
           done4 <= done3;
           done5 <= done4;
-          done <= done5;
+          done6 <= done5;
+          done7 <= done6;
+          done8 <= done7;
+          done <= done8;
         end
     end
 
@@ -61,7 +67,7 @@ module Output_Fetch_MEM(
             end
           else if(start & (short_count == 4'hf))
             begin
-              if((ReadAddress[14:0] +1'd1) == 15'd19199) //15'd19200)
+              if((ReadAddress[14:0]) == 15'd19199) //15'd19200)
                 begin
                   StartOut <= 1'd0;
                   ReadAddress <= ReadAddress;
