@@ -83,7 +83,7 @@ module Output_Fetch_MEM(
               StartOut <= 1'b0;
               data_in <= 8'dx;
               short_count <= 1'b0;
-              done <= 1'd0;
+              done0 <= 1'd0;
             end
         end
     end
