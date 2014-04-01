@@ -36,6 +36,6 @@ always@(posedge clock)
 always@(*) 
   begin 
     #2 ReadBus1  =  Register[ReadAddress1];
-     ReadBus2  =  Register[ReadAddress2]; 
+    ReadBus2  =  Register[ReadAddress2]; 
   end
 endmodule
