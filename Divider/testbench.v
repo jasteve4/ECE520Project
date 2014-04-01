@@ -38,8 +38,8 @@ module test();
   reg  clock = 1;
   reg  reset_n = 1;
   reg  start = 0;
-  reg  [27:0] z = 28'd100;
-  reg  [19:0] d = 20'd5;
+  reg  [27:0] z = 28'd765;
+  reg  [19:0] d = 20'd63;
   wire [7:0] q;
   wire s;
  
@@ -55,7 +55,7 @@ module test();
     s
   );*/
 
-  pipleline_divider divider(
+  pipeline_divider divider(
     .clock(clock),
     .reset_n(reset_n),
     .start(start),
@@ -72,12 +72,9 @@ module test();
     #20 reset_n = 0;
     #20 reset_n = 1;
     #20 start = 1;
-    #10 z = 101;
-        d = 5;
-    #10 z = 21;
-        d = 3;
-    #10 z = 300;
-        d = 3;
+    #10 z = 3315;
+    #10 z = 5865;
+    #10 z = 9180;
     #60
     $finish;
     end

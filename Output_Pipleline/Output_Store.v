@@ -24,7 +24,7 @@ module Output_Store(
     begin
       if(!reset_n)
         begin
-          WriteBus <= 127'bz;
+          WriteBus <= 127'b0;
           next_WriteAddress <= 16'b0;
           WriteEnable <= 1'b0;
           short_count <= 4'd15;
@@ -40,14 +40,14 @@ module Output_Store(
             end
           else if(StartIn)
             begin
-              WriteBus <= 127'bz;
+              WriteBus <= 127'b0;
               next_WriteAddress <= next_WriteAddress;
               WriteEnable <= 1'b0;
               short_count <= short_count - 1'b1;
             end
           else
             begin
-              WriteBus <= 127'bz;
+              WriteBus <= 127'b0;
               next_WriteAddress <= {output_base_offset,15'b0};
               WriteEnable <= 1'b0;
               short_count <= 4'd15;

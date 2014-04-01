@@ -10,7 +10,7 @@ module Output_Result(
   
 
   
-  pipleline_divider divider(
+  pipeline_divider divider(
     .clock(clock),
     .reset_n(reset_n),
     .start(StartIn),
