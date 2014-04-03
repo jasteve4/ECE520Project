@@ -50,20 +50,6 @@ module Top(
 
 
 
-  /*Cdf_top dut_CDF_top(
-    .clock(clock),
-    .reset_n(reset_n),
-    .start(cdf_start),
-    .SP_ReadBus(M2_ReadBus1),
-    .SP_ReadAddress(M2_ReadAddress1),
-    .WriteEnable(M2_WriteEnable),
-    .Output_MEMBus(M2_WriteBus),
-    .Output_MEMAddress(M2_WriteAddress),
-    .Cdf_Min(cdf_min),
-    .done(cdf_done),
-    .input_base_offset(input_base_offset),
-    .cdf_valid(cdf_valid)
-    );*/
 
   Controllor dut_Controller(
     .clock(clock),
@@ -80,22 +66,6 @@ module Top(
     .output_base_offset(output_base_offset),
     .cdf_valid(cdf_valid)
     );
-/*
-  Cdf_top dut_CDF_top(
-    .clock(clock),
-    .reset_n(reset_n),
-    .start(cdf_start),
-    .SP_ReadBus(M2_ReadBus1),
-    .SP_ReadAddress(M2_ReadAddress1),
-    .WriteEnable(M2_WriteEnable),
-    .Output_MEMBus(M2_WriteBus),
-    .Output_MEMAddress(M2_WriteAddress),
-    .Cdf_Min(cdf_min),
-    .done(cdf_done),
-    .input_base_offset(input_base_offset),
-    .cdf_valid(cdf_valid)
-    );
-*/
 
 //The below module is the first module in the overall pipeline
 //This counts how many times each pixel value occurs and calculates the CDF

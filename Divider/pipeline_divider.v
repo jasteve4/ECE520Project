@@ -45,7 +45,7 @@ module pipeline_divider(
             begin
               pipe0_result <= stage0_result;
               pipe0_divisor_n <= divisor_n;
-              pipe0_q <= {q_bit7,7'd0};
+              pipe0_q <= q_bit7;
               StartOut0 <= 1'd1;
             end
           else
@@ -76,7 +76,7 @@ module pipeline_divider(
             begin
               pipe1_result <= stage1_result;
               pipe1_divisor_n <= pipe0_divisor_n;
-              pipe1_q <= {pipe0_q[7],q_bit6,6'd0};
+              pipe1_q <= {pipe0_q,q_bit6};
               StartOut1 <= 1'd1;
             end
           else
@@ -107,7 +107,7 @@ module pipeline_divider(
             begin
               pipe2_result <= stage2_result;
               pipe2_divisor_n <= pipe1_divisor_n;
-              pipe2_q <= {pipe1_q[7:6], q_bit5, 5'd0};
+              pipe2_q <= {pipe1_q,q_bit5};
               StartOut2 <= 1'd1;
             end
           else
@@ -137,7 +137,7 @@ module pipeline_divider(
             begin
               pipe3_result <= stage3_result;
               pipe3_divisor_n <= pipe2_divisor_n;
-              pipe3_q <= {pipe2_q[7:5], q_bit4, 4'd0};
+              pipe3_q <= {pipe2_q, q_bit4};
               StartOut3 <= 1'd1;
             end
           else
@@ -168,7 +168,7 @@ module pipeline_divider(
             begin
               pipe4_result <= stage4_result;
               pipe4_divisor_n <= pipe3_divisor_n;
-              pipe4_q <= {pipe3_q[7:4], q_bit3, 3'd0};
+              pipe4_q <= {pipe3_q, q_bit3};
               StartOut4 <= 1'd1;
             end
           else
@@ -198,7 +198,7 @@ module pipeline_divider(
             begin
               pipe5_result <= stage5_result;
               pipe5_divisor_n <= pipe4_divisor_n;
-              pipe5_q <= {pipe4_q[7:3], q_bit2, 2'd0};
+              pipe5_q <= {pipe4_q, q_bit2};
               StartOut5 <= 1'd1;
             end
           else
@@ -229,7 +229,7 @@ module pipeline_divider(
             begin
               pipe6_result <= stage6_result;
               pipe6_divisor_n <= pipe5_divisor_n;
-              pipe6_q <= {pipe5_q[7:2], q_bit1, 1'd0};
+              pipe6_q <= {pipe5_q, q_bit1};
               StartOut <= 1'd1;
             end
           else
@@ -244,7 +244,7 @@ module pipeline_divider(
   
   pipleline_stage stage7(.divided(pipe6_result), .divisor(pipe6_divisor_n), .q(q_bit0), .stage_out(stage7_result));
 
-  assign q = {pipe6_q[7:1], q_bit0};
+  assign q =(pipe6_divisor_n != 20'd0) ? {pipe6_q, q_bit0} : 20'd0;
 
 endmodule
 
@@ -261,11 +261,11 @@ module pipleline_stage(
   wire [20:0] stage_result;
   wire [27:0] stage_divided;
 
- // DW01_add #(20)
- //   stage_add(.A(stage_divided[27:8]), .B(divisor), .CI(1'd1), .SUM(stage_result[19:0]), .CO(stage_result[20]));
+  DW01_add #(20)
+    stage_add(.A(stage_divided[27:8]), .B(divisor), .CI(1'd1), .SUM(stage_result[19:0]), .CO(stage_result[20]));
 
   assign stage_divided = {divided, 1'd0};
-  assign stage_result = stage_divided[27:8] + divisor;
+//  assign stage_result = stage_divided[27:8] + divisor;
   assign q = stage_result[20] ^ divided[27];
   assign stage_out = q ? {stage_result, stage_divided[7:0]} : stage_divided;
 

@@ -114,7 +114,6 @@ module Top_Testbench();
     .M2_WriteAddress(m2_WriteAddress),
     .M2_WriteEnable(m2_WriteEnable),
     .M3_ReadBus1(m3_ReadBus1),
-    .M3_ReadBus2(m3_ReadBus2),
     .M3_ReadAddress1(m3_ReadAddress1),
     .M3_ReadAddress2(m3_ReadAddress2),
     .M3_WriteBus(m3_WriteBus),

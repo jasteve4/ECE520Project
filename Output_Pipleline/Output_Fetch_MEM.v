@@ -4,9 +4,8 @@ module Output_Fetch_MEM(
   input wire          start,
   input wire [127:0]  ReadBus,
   output reg [15:0]   ReadAddress,
-  output reg [7:0]   DataOut,
+  output reg [15:0]   DataOut,
   output reg          StartOut,
-  output reg [15:0]   StoreAddress,
   input wire output_base_offset,
   output reg done
   );
@@ -14,12 +13,12 @@ module Output_Fetch_MEM(
   reg [3:0]           short_count;
   reg [127:0]           data_in;
   reg done0, done1, done2, done3, done4, done5, done6, done7, done8;
+  reg base_offset;
 
   always@(posedge clock or negedge reset_n)
     begin
       if(!reset_n)
         begin
-          StoreAddress <= 16'b0;
           done1 <= 1'd0;
           done2 <= 1'd0;
           done3 <= 1'd0;
@@ -32,7 +31,6 @@ module Output_Fetch_MEM(
         end
       else
         begin
-          StoreAddress <= ReadAddress;
           done1 <= done0;
           done2 <= done1;
           done3 <= done2;
@@ -94,25 +92,28 @@ module Output_Fetch_MEM(
         end
     end
 
+  always@(posedge clock)
+    base_offset <= output_base_offset;
+
   always@(*)
     begin
       case(short_count)
-        4'h0: DataOut <= data_in[7:0];
-        4'hf: DataOut <= data_in[15:8];
-        4'he: DataOut <= data_in[23:16];
-        4'hd: DataOut <= data_in[31:24];
-        4'hc: DataOut <= data_in[39:32];
-        4'hb: DataOut <= data_in[47:40];
-        4'ha: DataOut <= data_in[55:48];
-        4'h9: DataOut <= data_in[63:56];
-        4'h8: DataOut <= data_in[71:64];
-        4'h7: DataOut <= data_in[79:72];
-        4'h6: DataOut <= data_in[87:80];
-        4'h5: DataOut <= data_in[95:88];
-        4'h4: DataOut <= data_in[103:96];
-        4'h3: DataOut <= data_in[111:104];
-        4'h2: DataOut <= data_in[119:112];
-        4'h1: DataOut <= data_in[127:120];
+        16'hf: DataOut <= {base_offset,7'd0, data_in[15:8]};
+        16'he: DataOut <= {base_offset,7'd0, data_in[23:16]};
+        16'hd: DataOut <= {base_offset,7'd0, data_in[31:24]};
+        16'hc: DataOut <= {base_offset,7'd0, data_in[39:32]};
+        16'hb: DataOut <= {base_offset,7'd0, data_in[47:40]};
+        16'ha: DataOut <= {base_offset,7'd0, data_in[55:48]};
+        16'h9: DataOut <= {base_offset,7'd0, data_in[63:56]};
+        16'h8: DataOut <= {base_offset,7'd0, data_in[71:64]};
+        16'h7: DataOut <= {base_offset,7'd0, data_in[79:72]};
+        16'h6: DataOut <= {base_offset,7'd0, data_in[87:80]};
+        16'h5: DataOut <= {base_offset,7'd0, data_in[95:88]};
+        16'h4: DataOut <= {base_offset,7'd0, data_in[103:96]};
+        16'h3: DataOut <= {base_offset,7'd0, data_in[111:104]};
+        16'h2: DataOut <= {base_offset,7'd0, data_in[119:112]};
+        16'h1: DataOut <= {base_offset,7'd0, data_in[127:120]};
+        16'h0: DataOut <= {base_offset,7'd0, data_in[7:0]};
       endcase
     end
 

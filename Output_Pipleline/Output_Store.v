@@ -13,7 +13,6 @@ module Output_Store(
   reg [15:0] next_WriteAddress;
   reg [127:0] data;
   reg [127:0] offset;
-  integer i, j;
 
   always@(posedge clock)
     begin
@@ -31,19 +30,38 @@ module Output_Store(
         end
       else
         begin
-          if(StartIn & (short_count == 4'h0))
-            begin    
-              WriteBus <= data;
-              next_WriteAddress <= next_WriteAddress + 1'd1;
-              WriteEnable <= 1'b1;
-              short_count <= 4'd15;
-            end
-          else if(StartIn)
+          if(StartIn)
             begin
-              WriteBus <= 127'b0;
-              next_WriteAddress <= next_WriteAddress;
-              WriteEnable <= 1'b0;
-              short_count <= short_count - 1'b1;
+              case(short_count)
+                4'h0: WriteBus <= {WriteBus[127:8], ResultIn};
+                4'h1: WriteBus <= {WriteBus[127:16], ResultIn, WriteBus[7:0]};
+                4'h2: WriteBus <= {WriteBus[127:24], ResultIn, WriteBus[15:0]};
+                4'h3: WriteBus <= {WriteBus[127:32], ResultIn, WriteBus[23:0]};
+                4'h4: WriteBus <= {WriteBus[127:40], ResultIn, WriteBus[31:0]};
+                4'h5: WriteBus <= {WriteBus[127:48], ResultIn, WriteBus[39:0]};
+                4'h6: WriteBus <= {WriteBus[127:56], ResultIn, WriteBus[47:0]};
+                4'h7: WriteBus <= {WriteBus[127:64], ResultIn, WriteBus[55:0]};
+                4'h8: WriteBus <= {WriteBus[127:72], ResultIn, WriteBus[63:0]};
+                4'h9: WriteBus <= {WriteBus[127:80], ResultIn, WriteBus[71:0]};
+                4'ha: WriteBus <= {WriteBus[127:88], ResultIn, WriteBus[79:0]};
+                4'hb: WriteBus <= {WriteBus[127:96], ResultIn, WriteBus[87:0]};
+                4'hc: WriteBus <= {WriteBus[127:104], ResultIn, WriteBus[95:0]};
+                4'hd: WriteBus <= {WriteBus[127:112], ResultIn, WriteBus[103:0]};
+                4'he: WriteBus <= {WriteBus[127:120], ResultIn, WriteBus[111:0]};
+                4'hf: WriteBus <= {ResultIn, WriteBus[119:0]};
+              endcase
+              if(short_count == 4'h0)
+                begin
+                  next_WriteAddress <= next_WriteAddress + 1'd1;
+                  WriteEnable <= 1'b1;
+                  short_count <= 4'd15;
+                end
+              else
+                begin
+                  next_WriteAddress <= next_WriteAddress;
+                  WriteEnable <= 1'b0;
+                  short_count <= short_count - 1'b1;
+                end
             end
           else
             begin
@@ -55,6 +73,7 @@ module Output_Store(
         end
     end
 
+/*
   always@(*)
     begin
       for(i = 4'b0; i <= 4'd15; i = i + 4'b1)
@@ -77,5 +96,5 @@ module Output_Store(
             end
         end
     end
-
+*/
   endmodule

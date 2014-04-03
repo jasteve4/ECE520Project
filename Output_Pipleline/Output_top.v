@@ -15,28 +15,25 @@ module Output_top(
   input wire output_base_offset
   );
 
-  wire [7:0]          DataToStageTwo;
   wire                start_to_stage_two;
-  wire [15:0]         store_address;
 
   wire [19:0]         DataToStageThree;
   wire                start_to_stage_three;
 
   wire [27:0]         DataToStageFour;
-  wire                start_to_stage_Four;
+  wire                start_to_stage_four;
 
   wire [7:0]          result;
-  wire                start_to_stage_Five;
-
+  wire                start_to_stage_five;
+  
   Output_Fetch_MEM stage1(
     .clock(clock),
     .reset_n(reset_n),
     .start(start),
     .ReadBus(M3SP_ReadBus),
     .ReadAddress(M3SP_ReadAddress),
-    .DataOut(DataToStageTwo),
+    .DataOut(M2SP_ReadAddress),
     .StartOut(start_to_stage_two),
-    .StoreAddress(store_address),
     .output_base_offset(output_base_offset),
     .done(done)
     );
@@ -46,12 +43,9 @@ module Output_top(
     .clock(clock),
     .reset_n(reset_n),
     .ReadBus(M2SP_ReadBus),
-    .ReadAddress(M2SP_ReadAddress),
-    .DataIn(DataToStageTwo),
     .DataOut(DataToStageThree),
     .StartIn(start_to_stage_two),
-    .StartOut(start_to_stage_three),
-    .output_base_offset(output_base_offset)
+    .StartOut(start_to_stage_three)
     );
   
   Output_TopExpression stage3(

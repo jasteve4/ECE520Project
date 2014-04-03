@@ -5,7 +5,7 @@ reg reset_n = 1;
 reg start = 0;
 reg [19:0] cdf_min = 8'd1;
 reg [19:0] divisor = 20'd63;
-reg output_base_offset = 1'b1;
+reg output_base_offset = 1'b0;
 
 reg           m2_WriteEnable = 1;
 wire [15:0]   m2_WriteAddress;
