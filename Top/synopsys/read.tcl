@@ -25,9 +25,11 @@ read_verilog $RTL_DIR/Output_Result.v
 read_verilog $RTL_DIR/Output_Store.v
 read_verilog $RTL_DIR/Output_TopExpression.v
 read_verilog $RTL_DIR/Output_top.v
-read_verilog $RTL_DIR/Cdf_Accumlate.v
 read_verilog $RTL_DIR/pipeline_divider.v
+read_verilog $RTL_DIR/Cdf_Accumlate.v
 read_verilog $RTL_DIR/Cdf_Fetch.v
 read_verilog $RTL_DIR/Cdf_Store.v
 read_verilog $RTL_DIR/Cdf_top.v
 read_verilog $RTL_DIR/Top.v
+read_verilog $RTL_DIR/input_pipeline.v
+read_verilog $RTL_DIR/Controllor.v
