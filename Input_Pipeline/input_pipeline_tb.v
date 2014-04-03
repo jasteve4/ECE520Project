@@ -35,7 +35,7 @@ initial begin
   #30
   rst_n = 1;
   #10 start = 1;
-  #5000
+  #1000
   //#2000000
   start = 0;
   #20
