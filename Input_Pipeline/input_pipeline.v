@@ -29,8 +29,8 @@ module input_pipeline(
 
 
 //=====================NEEDED PARAMETERS=====================
-//parameter ADDRESS_OF_LAST = 15'd3;
-parameter ADDRESS_OF_LAST = 15'd19199;
+parameter ADDRESS_OF_LAST = 15'd3;
+//parameter ADDRESS_OF_LAST = 15'd19199;
 
 //======================PIPELINE STATES======================
 parameter [2:0]
@@ -62,13 +62,16 @@ reg input_done;
 always@(*) begin
   m1ReadBus_Reg <= m1ReadBus[pipelineCounter+:8'd8];
   m1ReadAddr <= {inputBaseOffset,memoryCounter};
-  m2ReadBus_Reg <= m2ReadBus[35:0];
+  
   m2ReadAddr <= input_done ? CDF_m2ReadAddr : readInitial_FI;
+  if(!input_done && (readInitial_FI == m2WriteAddr)) begin
+    m2ReadBus_Reg <= m2WriteBus[35:0];
+  end else begin 
+    m2ReadBus_Reg <= m2ReadBus[35:0];
+  end
 end
 
 always@(posedge clock) begin
-
-
   m2WE <= input_done ? CDF_m2WE : m2WE_Accum;
   m2WriteAddr <= input_done ? CDF_m2WriteAddr : readInitial_Accum;
   m2WriteBus <= input_done ? CDF_m2WriteBus : scratchVal_Accum;
@@ -105,7 +108,7 @@ always@(posedge clock or negedge rst_n) begin
       done_FS <= done_FI;
       m2WE_FS <= m2WE_FI;
       readInitial_FS <= readInitial_FI;
-  
+
       if(m2WE_Accum && (readInitial_FI == readInitial_Accum)) begin
         scratchVal_FS <= scratchVal_Accum;
       end else begin
