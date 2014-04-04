@@ -19,7 +19,7 @@ reg [127:0] input_data [0:65535];
 reg [127:0] memory [0:65535]; 
 integer i;
 
-always #5 clock = ~clock;
+always #2 clock = ~clock;
 
 initial begin
   //$monitor("WriteBus: %h, ReadVal: %h, Done: %d", WriteBus2, WriteAddress2, done);
@@ -29,8 +29,8 @@ initial begin
   inputBaseOffset = 0;
   #10 rst_n = 0;
   //$readmemh("input_small_hex.txt",m1.Register);
-  $readmemh("input_wiki.txt",m1.Register);
-  //$readmemh("input_oneColor.txt",m1.Register);
+  //$readmemh("input_wiki.txt",m1.Register);
+  $readmemh("input_oneColor.txt",m1.Register);
   
   #30
   rst_n = 1;
