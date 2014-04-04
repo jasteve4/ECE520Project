@@ -17,11 +17,11 @@ module input_pipeline(
   input wire start, clock, rst_n,
   input wire [127:0] m1ReadBus, m2ReadBus,
   input wire inputBaseOffset,
-  output wire [15:0] m1ReadAddr, 
-  output wire [15:0] m2ReadAddr, 
-  output wire [15:0] m2WriteAddr, m3WriteAddr, 
-  output wire [127:0] m2WriteBus, m3WriteBus,
-  output wire m2WE, m3WE,
+  output reg [15:0] m1ReadAddr, 
+  output reg [15:0] m2ReadAddr, 
+  output reg [15:0] m2WriteAddr, m3WriteAddr, 
+  output reg [127:0] m2WriteBus, m3WriteBus,
+  output reg m2WE, m3WE,
   output wire done,
   output wire [19:0] cdf_min,
   output wire cdf_valid
@@ -51,30 +51,34 @@ reg [6:0] pipelineCounter;
 reg [14:0] memoryCounter;
 
 //===================MISC Wires and Regs===================
-wire [15:0] m1ReadBus_Wire;
-wire [35:0] m2ReadBus_Wire;
+reg [15:0] m1ReadBus_Reg;
+reg [35:0] m2ReadBus_Reg;
 wire [15:0] CDF_m2ReadAddr, CDF_m2WriteAddr;
 wire [127:0] CDF_m2WriteBus;
 wire CDF_m2WE;
-wire input_done;
+reg input_done;
 
 //===================Write To Memory=======================
+always@(*) begin
+  m1ReadBus_Reg <= m1ReadBus[pipelineCounter+:8'd8];
+  m1ReadAddr <= {inputBaseOffset,memoryCounter};
+  m2ReadBus_Reg <= m2ReadBus[35:0];
+  m2ReadAddr <= input_done ? CDF_m2ReadAddr : readInitial_FI;
+end
 
-assign m1ReadBus_Wire = m1ReadBus[pipelineCounter+:8'd8];
-assign m1ReadAddr = {inputBaseOffset,memoryCounter};
+always@(posedge clock) begin
 
-assign m2ReadBus_Wire = m2ReadBus[35:0];
-assign m2ReadAddr = input_done ? CDF_m2ReadAddr : readInitial_FI;
 
-assign m2WE = input_done ? CDF_m2WE : m2WE_Accum;
-assign m2WriteAddr = input_done ? CDF_m2WriteAddr : readInitial_Accum;
-assign m2WriteBus = input_done ? CDF_m2WriteBus : scratchVal_Accum;
+  m2WE <= input_done ? CDF_m2WE : m2WE_Accum;
+  m2WriteAddr <= input_done ? CDF_m2WriteAddr : readInitial_Accum;
+  m2WriteBus <= input_done ? CDF_m2WriteBus : scratchVal_Accum;
 
-assign m3WE = m2WE_FI;
-assign m3WriteAddr = m1ReadAddr;
-assign m3WriteBus = m1ReadBus;
+  m3WE <= m2WE_FI;
+  m3WriteAddr <= m1ReadAddr;
+  m3WriteBus <= m1ReadBus;
 
-assign input_done = done_Accum;
+  input_done <= done_Accum;
+end
 
 //===================Pipeline====================
 always@(posedge clock or negedge rst_n) begin
@@ -95,7 +99,7 @@ always@(posedge clock or negedge rst_n) begin
       //Fetch Initial Memory
       done_FI <= done_enable;
       m2WE_FI <= write_enable;
-      readInitial_FI <= m1ReadBus_Wire;
+      readInitial_FI <= m1ReadBus_Reg;
 
       //Fetch Scratchpad Value
       done_FS <= done_FI;
@@ -105,8 +109,8 @@ always@(posedge clock or negedge rst_n) begin
       if(m2WE_Accum && (readInitial_FI == readInitial_Accum)) begin
         scratchVal_FS <= scratchVal_Accum;
       end else begin
-        if(m2ReadBus_Wire[35:20] == 16'hAAAA) begin
-          scratchVal_FS <= m2ReadBus_Wire;
+        if(m2ReadBus_Reg[35:20] == 16'hAAAA) begin
+          scratchVal_FS <= m2ReadBus_Reg;
         end else begin
           scratchVal_FS <= 36'hAAAA00000;
         end
@@ -176,7 +180,7 @@ always@(posedge clock or negedge rst_n) begin
 end
 
 //========================Calculate the CDF================================
-  Cdf_top dut_CDF_top(
+ /* Cdf_top dut_CDF_top(
     .clock(clock),
     .reset_n(rst_n),
     .start(input_done),
@@ -189,7 +193,7 @@ end
     .done(done),
     .input_base_offset(inputBaseOffset),
     .cdf_valid(cdf_valid)
-  );
+  );*/
 
 
 endmodule
