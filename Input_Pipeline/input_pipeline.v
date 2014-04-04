@@ -15,7 +15,8 @@ m4 = output memory
 ========================================*/
 module input_pipeline(
   input wire start, clock, rst_n,
-  input wire [127:0] m1ReadBus, m2ReadBus,
+  input wire [127:0] m1ReadBus,
+  input wire [35:0] m2ReadBus,
   input wire inputBaseOffset,
   output reg [15:0] m1ReadAddr, 
   output reg [15:0] m2ReadAddr, 
@@ -62,7 +63,7 @@ reg input_done;
 always@(*) begin
   m1ReadBus_Reg <= m1ReadBus[pipelineCounter+:8'd8];
   m1ReadAddr <= {inputBaseOffset,memoryCounter};
-  
+ 
   m2ReadAddr <= input_done ? CDF_m2ReadAddr : readInitial_FI;
   if(!input_done && (readInitial_FI == m2WriteAddr)) begin
     m2ReadBus_Reg <= m2WriteBus[35:0];
@@ -183,11 +184,11 @@ always@(posedge clock or negedge rst_n) begin
 end
 
 //========================Calculate the CDF================================
- /* Cdf_top dut_CDF_top(
+ Cdf_top dut_CDF_top(
     .clock(clock),
     .reset_n(rst_n),
     .start(input_done),
-    .SP_ReadBus(m2ReadBus),
+    .SP_ReadBus(m2ReadBus_Reg),
     .SP_ReadAddress(CDF_m2ReadAddr),
     .WriteEnable(CDF_m2WE),
     .Output_MEMBus(CDF_m2WriteBus),
@@ -196,7 +197,7 @@ end
     .done(done),
     .input_base_offset(inputBaseOffset),
     .cdf_valid(cdf_valid)
-  );*/
+  );
 
 
 endmodule
