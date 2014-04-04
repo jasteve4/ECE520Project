@@ -2,7 +2,7 @@ module Cdf_top(
   input wire          clock,
   input wire          reset_n,
   input wire          start,
-  input wire [127:0]  SP_ReadBus,
+  input wire [35:0]  SP_ReadBus,
   output wire [15:0]  SP_ReadAddress,
   output wire         WriteEnable,
   output wire [127:0] Output_MEMBus,

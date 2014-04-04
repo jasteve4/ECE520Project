@@ -2,7 +2,7 @@ module Cdf_Fetch(
   input wire          clock,
   input wire          reset_n,
   input wire         start,
-  input wire [127:0]  ReadBus,
+  input wire [35:0]  ReadBus,
   output wire [15:0]   ReadAddr,
   output reg [19:0]   AccumlateOut,
   output reg          StartOut,
@@ -21,7 +21,7 @@ module Cdf_Fetch(
 
   always@(*)
     begin
-      if(ReadBus[45:20] == 16'haaaa)
+      if(ReadBus[35:20] == 16'haaaa)
         DataIn <= ReadBus[19:0];
       else
         DataIn <= 20'd0;

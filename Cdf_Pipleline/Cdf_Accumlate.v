@@ -1,3 +1,8 @@
+
+  // synopsys translate_off
+`include "/afs/bp/dist/synopsys_syn/dw/sim_ver/DW01_add.v"
+  // synopsys translate_on
+
 module Cdf_Accumlate(
   input wire clock,
   input wire reset_n,
@@ -10,6 +15,9 @@ module Cdf_Accumlate(
   output reg [19:0] CdfMin,
   output reg CdfValid
   );
+
+  wire [19:0] AccumlateOut;
+  wire Cout;
 
   always@(posedge clock or negedge reset_n)
     if(!reset_n)
@@ -45,12 +53,12 @@ module Cdf_Accumlate(
         begin
           if(StartIn)
             begin
-              AccumlateResult <= AccumlateResult + AccumlateIn;
+              AccumlateResult <= AccumlateOut;
               if(CdfMin == 20'd0)
                 begin
                   if(AccumlateResult > 20'd0)
                     begin
-                      CdfMin <= AccumlateResult;
+                      CdfMin <= AccumlateOut;
                       CdfValid <= 1'd1;
                     end
                   else
@@ -73,5 +81,8 @@ module Cdf_Accumlate(
             end
         end
     end
+
+  DW01_add #(20)
+    add(.A(AccumlateResult), .B(AccumlateIn), .CI(1'd0), .SUM(AccumlateOut), .CO(Cout));
 
 endmodule
