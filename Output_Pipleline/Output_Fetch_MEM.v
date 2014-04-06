@@ -12,8 +12,11 @@ module Output_Fetch_MEM(
 
   reg [3:0]           short_count;
   reg [127:0]           data_in;
-  reg done0, done1, done2, done3, done4, done5, done6, done7, done8;
+  reg done0, done1, done2, done3, done4, done5, done6, done7, done8, done9, done10, done11;
   reg base_offset;
+  reg StartOut1,  StartOut0;
+
+//  assign StartOut = StartOut1 | StartOut0;
 
   always@(posedge clock or negedge reset_n)
     begin
@@ -27,6 +30,9 @@ module Output_Fetch_MEM(
           done6 <= 1'd0;
           done7 <= 1'd0;
           done8 <= 1'd0;
+          done9 <= 1'd0;
+          done10 <= 1'd0;
+          done11 <= 1'd0;
           done <= 1'd0;
         end
       else
@@ -39,7 +45,10 @@ module Output_Fetch_MEM(
           done6 <= done5;
           done7 <= done6;
           done8 <= done7;
-          done <= done8;
+          done9 <= done8;
+          done10 <= done9;
+          done11 <= done10;
+          done <= done11;
         end
     end
 
@@ -49,13 +58,21 @@ module Output_Fetch_MEM(
         begin
           ReadAddress <= 16'b0;
           StartOut <= 1'b0;
-          data_in <= 8'dx;
-          short_count <= 0;
+          data_in <= 8'd0;
+          short_count <= 4'd0;
           done0 <= 1'b0;
         end
       else
         begin
-          if(start & (short_count != 4'hf))
+          if((ReadAddress[14:0]) == 15'd4) //15'd19199)
+            begin
+              StartOut <= 1'd0;
+              ReadAddress <= ReadAddress;
+              data_in <= 8'd0;
+              short_count <= 4'd0;
+              done0 <= 1'b1;
+            end
+          else if(start & (short_count != 4'hf))
             begin
               ReadAddress <= ReadAddress;
               StartOut <= 1'b1;
@@ -65,27 +82,17 @@ module Output_Fetch_MEM(
             end
           else if(start & (short_count == 4'hf))
             begin
-              if((ReadAddress[14:0]) == 15'd19199) //15'd19200)
-                begin
-                  StartOut <= 1'd0;
-                  ReadAddress <= ReadAddress;
-                  short_count <= short_count;
-                  done0 <= 1'b1;
-                end
-              else
-                begin
-                  StartOut <= 1'd1;
-                  ReadAddress <= ReadAddress + 1'd1;
-                  short_count <= 4'd0;
-                  done0 <= 1'b0;
-                end
+              StartOut <= 1'd1;
+              ReadAddress <= ReadAddress + 1'd1;
+              short_count <= 4'd0;
+              done0 <= 1'b0;
               data_in <= ReadBus;
             end
           else
             begin
               ReadAddress <= {output_base_offset, 15'b0};
               StartOut <= 1'b0;
-              data_in <= 8'dx;
+              data_in <= 8'd0;
               short_count <= 1'b0;
               done0 <= 1'd0;
             end

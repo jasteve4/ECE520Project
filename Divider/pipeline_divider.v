@@ -10,268 +10,124 @@ module pipeline_divider(
   input wire [27:0] divided,
   input wire [19:0] divisor,
   output wire [7:0] q,
-  output reg StartOut
+  output wire StartOut
   );
 
 
-  wire [27:0] stage0_result, stage1_result, stage2_result, stage3_result, stage4_result;
-  wire [27:0] stage5_result, stage6_result, stage7_result;
-  wire [19:0] divisor_n;
+  wire start1, start2, start3, start4, start5, start6, start7;
+  wire [19:0] divisor1, divisor2, divisor3, divisor4, divisor5, divisor6, divisor7, divisor_in;
+  wire [27:0] result1, result2, result3, result4, result5, result6, result7;
+  wire [7:0] q0, q1, q2, q3, q4, q5, q6;
+  wire [9:0] input_init;
+  assign divisor_in = ~divisor;
 
-  reg [27:0] pipe0_result, pipe1_result, pipe2_result, pipe3_result, pipe4_result, pipe5_result, pipe6_result;
-  reg [19:0] pipe0_divisor_n, pipe1_divisor_n, pipe2_divisor_n, pipe3_divisor_n, pipe4_divisor_n, pipe5_divisor_n, pipe6_divisor_n;
-  wire q_bit0, q_bit1, q_bit2, q_bit3 ,q_bit4 ,q_bit5 ,q_bit6 ,q_bit7;
-  reg [7:0] pipe0_q, pipe1_q, pipe2_q, pipe3_q, pipe4_q, pipe5_q, pipe6_q;
+  divider_pipe_stage stage0(
+  .clock(clock),
+  .reset_n(reset_n),
+  .start(start),
+  .divided(divided),
+  .divisor(divisor_in),
+  .q_in(8'd0),
+  .start_out(start1),
+  .divisor_out(divisor1),
+  .result(result1),
+  .q_out(q0)
+  );
 
-  reg StartOut0, StartOut1, StartOut2, StartOut3, StartOut4, StartOut5;
+  divider_pipe_stage stage1(
+  .clock(clock),
+  .reset_n(reset_n),
+  .start(start1),
+  .divided(result1),
+  .divisor(divisor1),
+  .q_in(q0),
+  .start_out(start2),
+  .divisor_out(divisor2),
+  .result(result2),
+  .q_out(q1)
+  );
+
+  divider_pipe_stage stage2(
+  .clock(clock),
+  .reset_n(reset_n),
+  .start(start2),
+  .divided(result2),
+  .divisor(divisor2),
+  .q_in(q1),
+  .start_out(start3),
+  .divisor_out(divisor3),
+  .result(result3),
+  .q_out(q2)
+  );
+
   
-  // Pipe zero
-  assign divisor_n = ~divisor;
+  divider_pipe_stage stage3(
+  .clock(clock),
+  .reset_n(reset_n),
+  .start(start3),
+  .divided(result3),
+  .divisor(divisor3),
+  .q_in(q2),
+  .start_out(start4),
+  .divisor_out(divisor4),
+  .result(result4),
+  .q_out(q3)
+  );
 
-  pipleline_stage stage0(.divided(divided), .divisor(divisor_n), .q(q_bit7), .stage_out(stage0_result));
-  
-  always@(posedge clock or negedge reset_n)
-    begin
-      if(!reset_n)
-        begin
-          pipe0_result <= 28'd0;
-          pipe0_divisor_n <= 20'd0;
-          pipe0_q <= 8'd0;
-          StartOut0 <= 1'd0;
-        end
-      else
-        begin
-          if(start)
-            begin
-              pipe0_result <= stage0_result;
-              pipe0_divisor_n <= divisor_n;
-              pipe0_q <= q_bit7;
-              StartOut0 <= 1'd1;
-            end
-          else
-            begin
-              pipe0_result <= 28'd0;
-              pipe0_divisor_n <= 20'd0;
-              pipe0_q <= 8'd0;
-              StartOut0 <= 1'd0;
-            end
-        end
-    end
-  
-  pipleline_stage stage1(.divided(pipe0_result), .divisor(pipe0_divisor_n), .q(q_bit6), .stage_out(stage1_result));
+  divider_pipe_stage stage4(
+  .clock(clock),
+  .reset_n(reset_n),
+  .start(start4),
+  .divided(result4),
+  .divisor(divisor4),
+  .q_in(q3),
+  .start_out(start5),
+  .divisor_out(divisor5),
+  .result(result5),
+  .q_out(q4)
+  );
 
-  // Pipe One
-  always@(posedge clock or negedge reset_n)
-    begin
-      if(!reset_n)
-        begin
-          pipe1_result <= 28'd0;
-          pipe1_divisor_n <= 20'd0;
-          pipe1_q <= 8'd0;
-          StartOut1 <= 1'd0;
-        end
-      else
-        begin
-          if(StartOut0)
-            begin
-              pipe1_result <= stage1_result;
-              pipe1_divisor_n <= pipe0_divisor_n;
-              pipe1_q <= {pipe0_q,q_bit6};
-              StartOut1 <= 1'd1;
-            end
-          else
-            begin
-              pipe1_result <= 28'd0;
-              pipe1_divisor_n <= 20'd0;
-              pipe1_q <= 8'd0;
-              StartOut1 <= 1'd0;
-            end
-        end
-    end
+  divider_pipe_stage stage5(
+  .clock(clock),
+  .reset_n(reset_n),
+  .start(start5),
+  .divided(result5),
+  .divisor(divisor5),
+  .q_in(q4),
+  .start_out(start6),
+  .divisor_out(divisor6),
+  .result(result6),
+  .q_out(q5)
+  );
 
-  // Pipe One
-  pipleline_stage stage2(.divided(pipe1_result), .divisor(pipe1_divisor_n), .q(q_bit5), .stage_out(stage2_result));
-  
-  always@(posedge clock or negedge reset_n)
-    begin
-      if(!reset_n)
-        begin
-          pipe2_result <= 28'd0;
-          pipe2_divisor_n <= 20'd0;
-          pipe2_q <= 8'd0;
-          StartOut2 <= 1'd0;
-        end
-      else
-        begin
-          if(StartOut1)
-            begin
-              pipe2_result <= stage2_result;
-              pipe2_divisor_n <= pipe1_divisor_n;
-              pipe2_q <= {pipe1_q,q_bit5};
-              StartOut2 <= 1'd1;
-            end
-          else
-            begin
-              pipe2_result <= 28'd0;
-              pipe2_divisor_n <= 20'd0;
-              pipe2_q <= 8'd0;
-              StartOut2 <= 1'd0;
-            end
-        end
-    end
+  divider_pipe_stage stage6(
+  .clock(clock),
+  .reset_n(reset_n),
+  .start(start6),
+  .divided(result6),
+  .divisor(divisor6),
+  .q_in(q5),
+  .start_out(start7),
+  .divisor_out(divisor7),
+  .result(result7),
+  .q_out(q6)
+  );
 
-  pipleline_stage stage3(.divided(pipe2_result), .divisor(pipe2_divisor_n), .q(q_bit4), .stage_out(stage3_result));
+  end_pipe_stage stage7(
+  .clock(clock),
+  .reset_n(reset_n),
+  .start(start7),
+  .divided(result7),
+  .divisor(divisor7),
+  .q_in(q6),
+  .start_out(StartOut),
+  .q_out(q)
+  );
 
-  always@(posedge clock or negedge reset_n)
-    begin
-      if(!reset_n)
-        begin
-          pipe3_result <= 28'd0;
-          pipe3_divisor_n <= 20'd0;
-          pipe3_q <= 8'd0;
-          StartOut3 <= 1'd0;
-        end
-      else
-        begin
-          if(StartOut2)
-            begin
-              pipe3_result <= stage3_result;
-              pipe3_divisor_n <= pipe2_divisor_n;
-              pipe3_q <= {pipe2_q, q_bit4};
-              StartOut3 <= 1'd1;
-            end
-          else
-            begin
-              pipe3_result <= 28'd0;
-              pipe3_divisor_n <= 20'd0;
-              pipe3_q <= 8'd0;
-              StartOut3 <= 1'd0;
-            end
-        end
-    end
-
-  // Pipe Two
-  pipleline_stage stage4(.divided(pipe3_result), .divisor(pipe3_divisor_n), .q(q_bit3), .stage_out(stage4_result));
-  
-  always@(posedge clock or negedge reset_n)
-    begin
-      if(!reset_n)
-        begin
-          pipe4_result <= 28'd0;
-          pipe4_divisor_n <= 20'd0;
-          pipe4_q <= 8'd0;
-          StartOut4 <= 1'd0;
-        end
-      else
-        begin
-          if(StartOut3)
-            begin
-              pipe4_result <= stage4_result;
-              pipe4_divisor_n <= pipe3_divisor_n;
-              pipe4_q <= {pipe3_q, q_bit3};
-              StartOut4 <= 1'd1;
-            end
-          else
-            begin
-              pipe4_result <= 28'd0;
-              pipe4_divisor_n <= 20'd0;
-              pipe4_q <= 8'd0;
-              StartOut4 <= 1'd0;
-            end
-        end
-    end
-
-  pipleline_stage stage5(.divided(pipe4_result), .divisor(pipe4_divisor_n), .q(q_bit2), .stage_out(stage5_result));
-  
-  always@(posedge clock or negedge reset_n)
-    begin
-      if(!reset_n)
-        begin
-          pipe5_result <= 28'd0;
-          pipe5_divisor_n <= 20'd0;
-          pipe5_q <= 8'd0;
-          StartOut5 <= 1'd0;
-        end
-      else
-        begin
-          if(StartOut4)
-            begin
-              pipe5_result <= stage5_result;
-              pipe5_divisor_n <= pipe4_divisor_n;
-              pipe5_q <= {pipe4_q, q_bit2};
-              StartOut5 <= 1'd1;
-            end
-          else
-            begin
-              pipe5_result <= 28'd0;
-              pipe5_divisor_n <= 20'd0;
-              pipe5_q <= 8'd0;
-              StartOut5 <= 1'd0;
-            end
-        end
-    end
-  
-  // Pipe Three
-  pipleline_stage stage6(.divided(pipe5_result), .divisor(pipe5_divisor_n), .q(q_bit1), .stage_out(stage6_result));
-  
-  always@(posedge clock or negedge reset_n)
-    begin
-      if(!reset_n)
-        begin
-          pipe6_result <= 28'd0;
-          pipe6_divisor_n <= 20'd0;
-          pipe6_q <= 8'd0;
-          StartOut <= 1'd0;
-        end
-      else
-        begin
-          if(StartOut5)
-            begin
-              pipe6_result <= stage6_result;
-              pipe6_divisor_n <= pipe5_divisor_n;
-              pipe6_q <= {pipe5_q, q_bit1};
-              StartOut <= 1'd1;
-            end
-          else
-            begin
-              pipe6_result <= 28'd0;
-              pipe6_divisor_n <= 20'd0;
-              pipe6_q <= 8'd0;
-              StartOut <= 1'd0;
-            end
-        end
-    end
-  
-  pipleline_stage stage7(.divided(pipe6_result), .divisor(pipe6_divisor_n), .q(q_bit0), .stage_out(stage7_result));
-
-  assign q =(pipe6_divisor_n != 20'd0) ? {pipe6_q, q_bit0} : 20'd0;
 
 endmodule
 
 
 
 
-module pipleline_stage(
-  input wire [27:0] divided,
-  input wire [19:0] divisor,
-  output q,
-  output [27:0] stage_out
-  );
 
-  wire [20:0] stage_result;
-  wire [27:0] stage_divided;
-
-  DW01_add #(20)
-    stage_add(.A(stage_divided[27:8]), .B(divisor), .CI(1'd1), .SUM(stage_result[19:0]), .CO(stage_result[20]));
-
-  assign stage_divided = {divided, 1'd0};
-//  assign stage_result = stage_divided[27:8] + divisor;
-  assign q = stage_result[20] ^ divided[27];
-  assign stage_out = q ? {stage_result, stage_divided[7:0]} : stage_divided;
-
-/*
-  assign stage_result = divided[14:7] + divisor;
-  assign q = stage_result[8] ^ divided[15];
-  assign stage_out = q ? {stage_result, divided[8:1]} : {divided, 1'd0};
-*/
-endmodule

@@ -24,12 +24,12 @@ module Output_TopExpression(
 
 
   DW01_add #(20)
-    first_add(.A(DataIn), .B(~CdfMin), .CI(1'd1), .SUM(dataResult), .CO(data_Cout));
+    first_add(.A(DataIn), .B(~CdfMin), .CI(1'd1), .SUM(dataResult), .CO(data_cout));
 
   always@(posedge clock or negedge reset_n)
     if(!reset_n)
       begin
-        Data <= 20'b0;
+        Data <= data_cout;
         Start0 <= 1'd0;
       end
     else
