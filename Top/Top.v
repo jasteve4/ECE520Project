@@ -69,13 +69,18 @@ module Top(
 
 //The below module is the first module in the overall pipeline
 //This counts how many times each pixel value occurs and calculates the CDF
+input_top top_dut(.start(start), .clock(clock), .rst_n(rst_n), .m1ReadBus(ReadBus1), .m2ReadBus(ReadBus2[35:0]),
+        .inputBaseOffset(inputBaseOffset), .m1ReadAddr(ReadAddress1), .m2ReadAddr(ReadAddress2), 
+        .m2WriteAddr(WriteAddress2), .m3WriteAddr(WriteAddress3), .m2WriteBus(WriteBus2), .m3WriteBus(WriteBus3),
+        .m2WE(WE2), .m3WE(WE3), .done(done), .cdf_valid(cdf_valid), .cdf_min(cdf_min));
 
-  input_pipeline dut_Input_Pipeline(
+
+/*  input_pipeline dut_Input_Pipeline(
     .start(input_start), 
     .clock(clock), 
     .rst_n(reset_n),
     .m1ReadBus(M1_ReadBus1), 
-    .m2ReadBus(M2_ReadBus1),
+    .m2ReadBus(M2_ReadBus1[35:0]),
     .inputBaseOffset(input_base_offset),
     .m1ReadAddr(M1_ReadAddress1), 
     .m2ReadAddr(M2_ReadAddress1), 
@@ -86,5 +91,5 @@ module Top(
     .cdf_valid(cdf_valid),
     .cdf_min(cdf_min)
   );
-
+*/
 endmodule
