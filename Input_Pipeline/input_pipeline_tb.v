@@ -29,13 +29,13 @@ initial begin
   inputBaseOffset = 0;
   #10 rst_n = 0;
   //$readmemh("input_small_hex.txt",m1.Register);
-  //$readmemh("input_wiki.txt",m1.Register);
-  $readmemh("input_oneColor.txt",m1.Register);
+  $readmemh("input_wiki.txt",m1.Register);
+  //$readmemh("input_oneColor.txt",m1.Register);
   
   #30
   rst_n = 1;
   #10 start = 1;
-  #1000
+  #3000
   //#2000000
   start = 0;
   #20
@@ -46,12 +46,17 @@ initial begin
   $finish;
 end
 
-input_pipeline dut1 ( .start(start), .clock(clock), .rst_n(rst_n),
-      .m1ReadBus(ReadBus1), .m2ReadBus(ReadBus2), .inputBaseOffset(inputBaseOffset), .m1ReadAddr(ReadAddress1), 
+input_top top_dut(.start(start), .clock(clock), .rst_n(rst_n), .m1ReadBus(ReadBus1), .m2ReadBus(ReadBus2[35:0]),
+        .inputBaseOffset(inputBaseOffset), .m1ReadAddr(ReadAddress1), .m2ReadAddr(ReadAddress2), 
+        .m2WriteAddr(WriteAddress2), .m3WriteAddr(WriteAddress3), .m2WriteBus(WriteBus2), .m3WriteBus(WriteBus3),
+        .m2WE(WE2), .m3WE(WE3), .done(done), .cdf_valid(cdf_valid), .cdf_min(cdf_min));
+
+/*input_pipeline dut1 ( .start(start), .clock(clock), .rst_n(rst_n),
+      .m1ReadBus(ReadBus1), .m2ReadBus(ReadBus2[35:0]), .inputBaseOffset(inputBaseOffset), .m1ReadAddr(ReadAddress1), 
       .m2ReadAddr(ReadAddress2), .m2WriteAddr(WriteAddress2), .m3WriteAddr(WriteAddress3), 
       .m2WriteBus(WriteBus2), .m3WriteBus(WriteBus3), .m2WE(WE2), .m3WE(WE3), 
       .done(done), .cdf_min(cdf_min), .cdf_valid(cdf_valid));
-
+*/
 sram_2R1W m1(.clock(clock), .WE(WE1), .WriteAddress(WriteAddress1), .ReadAddress1(ReadAddress1), 
         .ReadAddress2(), .WriteBus(WriteBus1), .ReadBus1(ReadBus1), .ReadBus2());
 
