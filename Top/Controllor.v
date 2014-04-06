@@ -19,7 +19,7 @@ module Controllor(
   parameter BEGIN           = 2'd1;
   parameter BEGIN_CDF       = 2'd2;
   parameter REPEAT          = 2'd3;
-  parameter WAIT_FOR_OUTPUT = 1'd1;
+  parameter WAIT_FOR_INPUT = 1'd1;
   parameter REPEAT_START    = 1'd0;
   parameter DIVIDEND        = 20'd307200;
 
@@ -93,52 +93,54 @@ module Controllor(
                     input_start <= 1'd0;
                     output_start <= 1'd0;
                     State <= REPEAT; 
+                    input_base_offset <= 1'd1;
+                    output_base_offset <= 1'd0;
                   end
                 else
                   begin
                     input_start <= 1'd1;
                     output_start <= 1'd0;
                     State <= BEGIN; 
+                    input_base_offset <= 1'd0;
+                    output_base_offset <= 1'd0;
                   end
                   RepeatState <= REPEAT_START;
-                  input_base_offset <= 1'd0;
-                  output_base_offset <= 1'd0;
               end
             REPEAT:
               begin
                 case(RepeatState)
                   REPEAT_START:
                     begin
-                      if(input_done)
+                      if(output_done)
                         begin
-                          input_start <= 1'd0; // change for all run 
-                          output_start <= 1'd1;
-                          RepeatState <= WAIT_FOR_OUTPUT;
+                          input_start <= 1'd1; // change for all run 
+                          output_start <= 1'd0;
+                          RepeatState <= WAIT_FOR_INPUT;
                         end
                       else
                         begin
-                          input_start <= 1'd0; 
+                          input_start <= 1'd1; 
                           output_start <= 1'd1;
                           RepeatState <= REPEAT_START;
                         end
                         input_base_offset <= input_base_offset;
                         output_base_offset <= output_base_offset;
                     end
-                  WAIT_FOR_OUTPUT:
+                  WAIT_FOR_INPUT:
                     begin
-                      if(output_done)
+                      if(input_done)
                         begin
                           input_start <= 1'd0; 
                           output_start <= 1'd0;
-                          RepeatState <= WAIT_FOR_OUTPUT;
+                          RepeatState <= REPEAT_START;
                           input_base_offset <= ~input_base_offset;
                           output_base_offset <= ~output_base_offset;
                         end
                       else
                         begin
-                          input_start <= 1'd0; 
-                          output_start <= 1'd1;
-                          RepeatState <= WAIT_FOR_OUTPUT;
+                          input_start <= 1'd1; 
+                          output_start <= 1'd0;
+                          RepeatState <= WAIT_FOR_INPUT;
                           input_base_offset <= input_base_offset;
                           output_base_offset <= output_base_offset;
                         end

@@ -1,3 +1,6 @@
+// memory data file (do not edit the following line - required for mem load use)
+// instance=/Top_Testbench/m4/Register
+// format=hex addressradix=h dataradix=h version=1.0 wordsperline=1 noaddress
 41434344444343424342424141424243
 4342424341413F404241414040403F3F
 3E3E3E3E3F3F3F3F3F3E3E3C3B3B3738

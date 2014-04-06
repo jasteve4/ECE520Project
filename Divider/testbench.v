@@ -39,7 +39,7 @@ module test();
   reg  reset_n = 1;
   reg  start = 0;
   reg  [27:0] z = 28'd765;
-  reg  [19:0] d = 20'd63;
+  reg  [19:0] d = 20'h4aff4;
   wire [7:0] q;
   wire s;
  
@@ -74,6 +74,10 @@ module test();
     #20 start = 1;
     #10 z = 3315;
     #10 z = 5865;
+    #10 z = 9180;
+    #10 z = 27'h131f5d7;
+    #10 z = 9180;
+    #10 z = 9180;
     #10 z = 9180;
     #200
     $finish;

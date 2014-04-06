@@ -53,7 +53,7 @@ module Cdf_Accumlate(
               AccumlateResult <= AccumlateOut;
               if(CdfMin == 20'd0)
                 begin
-                  if(AccumlateResult > 20'd0)
+                  if(AccumlateOut > 20'd0)
                     begin
                       CdfMin <= AccumlateOut;
                       CdfValid <= 1'd1;

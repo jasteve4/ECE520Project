@@ -24,14 +24,12 @@ module input_pipeline(
   output reg [127:0] m2WriteBus, m3WriteBus,
   output reg m2WE, m3WE,
   output reg input_done
-  //output wire [19:0] cdf_min,
- // output wire cdf_valid
 );
 
 
 //=====================NEEDED PARAMETERS=====================
-//parameter ADDRESS_OF_LAST = 15'd3;
-parameter ADDRESS_OF_LAST = 15'd19199;
+parameter ADDRESS_OF_LAST = 15'd3;
+//parameter ADDRESS_OF_LAST = 15'd19199;
 
 //======================PIPELINE STATES======================
 parameter [2:0]
@@ -45,26 +43,23 @@ parameter [2:0]
 
 //===================Pipeline Registers=====================
 reg write_enable, m2WE_FI, m2WE_FS, m2WE_Accum;
-reg [15:0] readInitial_FI, readInitial_FS, readInitial_Accum;
+reg [14:0] readInitial_FI, readInitial_FS, readInitial_Accum;
 reg [35:0] scratchVal_FS, scratchVal_Accum;
 reg done_FI, done_FS, done_Accum, done_enable;
 reg [6:0] pipelineCounter;
-reg [14:0] memoryCounter;
+reg [15:0] memoryCounter;
 
 //===================MISC Wires and Regs===================
 reg [15:0] m1ReadBus_Reg;
 reg [35:0] m2ReadBus_Reg;
-//wire [15:0] CDF_m2ReadAddr, CDF_m2WriteAddr;
-//wire [127:0] CDF_m2WriteBus;
-//wire CDF_m2WE;
 
 //===================Write To Memory=======================
 always@(*) begin
   m1ReadBus_Reg <= m1ReadBus[pipelineCounter+:8'd8];
-  m1ReadAddr <= {inputBaseOffset,memoryCounter};
+  m1ReadAddr <= memoryCounter;
  
-  m2ReadAddr <= readInitial_FI;
-  if(!input_done && (readInitial_FI == m2WriteAddr)) begin
+  m2ReadAddr <= {inputBaseOffset,readInitial_FI};
+  if(!input_done && (readInitial_FI == m2WriteAddr[14:0])) begin
     m2ReadBus_Reg <= m2WriteBus[35:0];
   end else begin 
     m2ReadBus_Reg <= m2ReadBus[35:0];
@@ -73,11 +68,11 @@ end
 
 always@(posedge clock) begin
   m2WE <= m2WE_Accum;
-  m2WriteAddr <= readInitial_Accum;
+  m2WriteAddr <= {inputBaseOffset,readInitial_Accum};
   m2WriteBus <= scratchVal_Accum;
 
   m3WE <= m2WE_FI;
-  m3WriteAddr <= m1ReadAddr;
+  m3WriteAddr <= {inputBaseOffset,m1ReadAddr[14:0]};
   m3WriteBus <= m1ReadBus;
 
   input_done <= done_Accum;
@@ -181,22 +176,5 @@ always@(posedge clock or negedge rst_n) begin
     end
   end
 end
-
-//========================Calculate the CDF================================
-/* Cdf_top dut_CDF_top(
-    .clock(clock),
-    .reset_n(rst_n),
-    .start(input_done),
-    .SP_ReadBus(m2ReadBus_Reg),
-    .SP_ReadAddress(CDF_m2ReadAddr),
-    .WriteEnable(CDF_m2WE),
-    .Output_MEMBus(CDF_m2WriteBus),
-    .Output_MEMAddress(CDF_m2WriteAddr),
-    .Cdf_Min(cdf_min),
-    .done(done),
-    .input_base_offset(inputBaseOffset),
-    .cdf_valid(cdf_valid)
-  );
-*/
 
 endmodule

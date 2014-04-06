@@ -1,3 +1,7 @@
+  // synopsys translate_off
+`include "/afs/bp/dist/synopsys_syn/dw/sim_ver/DW01_add.v"
+  // synopsys translate_on
+
 module input_pipeline_tb();
 
 reg clock, start, rst_n;
@@ -26,7 +30,7 @@ initial begin
   clock = 0;
   rst_n = 1;
   start = 0;
-  inputBaseOffset = 0;
+  inputBaseOffset = 1;
   #10 rst_n = 0;
   //$readmemh("input_small_hex.txt",m1.Register);
   $readmemh("input_wiki.txt",m1.Register);
