@@ -43,7 +43,6 @@ module Top_Testbench();
 
   initial begin
     $readmemh("input_small_hex.txt",m1.Register);
-    $readmemh("input_small_hex.txt",m3.Register);
     #10 reset_n = 0;
     #10 reset_n = 1;
     #20 start = 1;
@@ -106,8 +105,8 @@ module Top_Testbench();
     .start(start),
     .M1_ReadBus1(m1_ReadBus1),
     .M1_ReadAddress1(m1_ReadAddress1),
-    .M2_ReadBus1(m2_ReadBus1),
-    .M2_ReadBus2(m2_ReadBus2),
+    .M2_ReadBus1(m2_ReadBus1[35:0]),
+    .M2_ReadBus2(m2_ReadBus2[19:0]),
     .M2_ReadAddress1(m2_ReadAddress1),
     .M2_ReadAddress2(m2_ReadAddress2),
     .M2_WriteBus(m2_WriteBus),
@@ -115,7 +114,6 @@ module Top_Testbench();
     .M2_WriteEnable(m2_WriteEnable),
     .M3_ReadBus1(m3_ReadBus1),
     .M3_ReadAddress1(m3_ReadAddress1),
-    .M3_ReadAddress2(m3_ReadAddress2),
     .M3_WriteBus(m3_WriteBus),
     .M3_WriteAddress(m3_WriteAddress),
     .M3_WriteEnable(m3_WriteEnable),

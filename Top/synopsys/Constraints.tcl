@@ -69,8 +69,8 @@
  set DFF_CKQ 0.638
  set DATA_IP_DELAY [expr 0.02 + 2]
  set IP_DELAY [expr 0.02 + $DFF_CKQ]
- set_input_delay $DATA_IP_DELAY -clock $clkname [get_ports {M1_ReadBus1 M2_ReadBus1 M2_ReadBus2    }]
- set_input_delay $IP_DELAY -clock $clkname [get_ports {reset_n start CdfMin divisor output_base_offset}]
+ set_input_delay $DATA_IP_DELAY -clock $clkname [get_ports {M1_ReadBus1 M2_ReadBus1 M2_ReadBus2 M3_ReadBus1}]
+ set_input_delay $IP_DELAY -clock $clkname [get_ports {reset_n start}]
 
 #---------------------------------------------------------
 # ASSUME this module is driving a D-flip-flip          
@@ -81,8 +81,8 @@
  set DFF_SETUP 0.546
  set DATA_OP_DELAY [expr 0.02 + $DFF_SETUP + 2]
  set OP_DELAY [expr 0.02 + $DFF_SETUP]
- set_output_delay $DATA_OP_DELAY -clock $clkname [get_ports {Output_MEMBus}]
- set_output_delay $OP_DELAY -clock $clkname [get_ports {M2SP_ReadAddress M3SP_ReadAddress Output_MEMAddress done}]
+ set_output_delay $DATA_OP_DELAY -clock $clkname [get_ports {M2_WriteBus M3_WriteBus M4_WriteBus}]
+ set_output_delay $OP_DELAY -clock $clkname [get_ports {M1_ReadAddress1 M2_ReadAddress1 M2_ReadAddress2 M2_WriteAddress M2_WriteEnable M3_ReadAddress1 M3_WriteAddress M3_WriteEnable M4_WriteAddress M4_WriteEnable}]
 
 #---------------------------------------------------------	
 # ASSUME being driven by a D-flip-flop                 

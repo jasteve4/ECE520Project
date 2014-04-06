@@ -33,3 +33,6 @@ read_verilog $RTL_DIR/Cdf_top.v
 read_verilog $RTL_DIR/Top.v
 read_verilog $RTL_DIR/input_pipeline.v
 read_verilog $RTL_DIR/Controllor.v
+read_verilog $RTL_DIR/end_pipe_stage.v
+read_verilog $RTL_DIR/divider_pipe_stage.v
+read_verilog $RTL_DIR/input_top.v

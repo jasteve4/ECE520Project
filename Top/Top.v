@@ -1,20 +1,23 @@
+
+  // synopsys translate_off
+`include "/afs/bp/dist/synopsys_syn/dw/sim_ver/DW01_add.v"
+  // synopsys translate_on
+
 module Top(
   input wire clock,
   input wire reset_n,
   input wire start,
   input wire [127:0] M1_ReadBus1,
   output wire [15:0] M1_ReadAddress1,
-  input wire [127:0] M2_ReadBus1,
-  input wire [127:0] M2_ReadBus2,
+  input wire [35:0] M2_ReadBus1,
+  input wire [19:0] M2_ReadBus2,
   output tri [15:0] M2_ReadAddress1,
   output wire [15:0] M2_ReadAddress2,
   output tri [127:0] M2_WriteBus,
   output tri [15:0] M2_WriteAddress,
   output tri M2_WriteEnable,
   input wire [127:0] M3_ReadBus1,
-  input wire [127:0] M3_ReadBus2,
   output wire [15:0] M3_ReadAddress1,
-  output wire [15:0] M3_ReadAddress2,
   output wire [127:0] M3_WriteBus,
   output wire [15:0] M3_WriteAddress,
   output wire M3_WriteEnable,
@@ -37,10 +40,10 @@ module Top(
     .start(output_start),
     .CdfMin(cdf_min_out),
     .divisor(divisor),
-    .M2SP_ReadBus(M2_ReadBus2),
+    .M2SP_ReadBus(M2_ReadBus2[19:0]),
     .M2SP_ReadAddress(M2_ReadAddress2),
-    .M3SP_ReadBus(M3_ReadBus2),
-    .M3SP_ReadAddress(M3_ReadAddress2),
+    .M3SP_ReadBus(M3_ReadBus1),
+    .M3SP_ReadAddress(M3_ReadAddress1),
     .WriteEnable(M4_WriteEnable),
     .Output_MEMBus(M4_WriteBus),
     .Output_MEMAddress(M4_WriteAddress),
@@ -70,7 +73,7 @@ module Top(
 //The below module is the first module in the overall pipeline
 //This counts how many times each pixel value occurs and calculates the CDF
 input_top top_dut(.start(input_start), .clock(clock), .rst_n(reset_n), .m1ReadBus(M1_ReadBus1), .m2ReadBus(M2_ReadBus1[35:0]),
-        .inputBaseOffset(inputBaseOffset), .m1ReadAddr(M1_ReadAddress1), .m2ReadAddr(M2_ReadAddress1), 
+        .inputBaseOffset(input_base_offset), .m1ReadAddr(M1_ReadAddress1), .m2ReadAddr(M2_ReadAddress1), 
         .m2WriteAddr(M2_WriteAddress), .m3WriteAddr(M3_WriteAddress), .m2WriteBus(M2_WriteBus), .m3WriteBus(M3_WriteBus),
         .m2WE(M2_WriteEnable), .m3WE(M3_WriteEnable), .done(input_done), .cdf_valid(cdf_valid), .cdf_min(cdf_min));
 

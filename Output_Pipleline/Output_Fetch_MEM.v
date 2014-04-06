@@ -64,7 +64,7 @@ module Output_Fetch_MEM(
         end
       else
         begin
-          if((ReadAddress[14:0]) == 15'd4) //15'd19199)
+          if((ReadAddress[14:0]) == 15'd19199)
             begin
               StartOut <= 1'd0;
               ReadAddress <= ReadAddress;

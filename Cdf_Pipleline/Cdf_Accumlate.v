@@ -1,7 +1,4 @@
 
-  // synopsys translate_off
-`include "/afs/bp/dist/synopsys_syn/dw/sim_ver/DW01_add.v"
-  // synopsys translate_on
 
 module Cdf_Accumlate(
   input wire clock,

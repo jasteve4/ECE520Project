@@ -26,3 +26,5 @@ read_verilog $RTL_DIR/Output_Store.v
 read_verilog $RTL_DIR/Output_TopExpression.v
 read_verilog $RTL_DIR/Output_top.v
 read_verilog $RTL_DIR/pipeline_divider.v
+read_verilog $RTL_DIR/divider_pipe_stage.v
+read_verilog $RTL_DIR/end_pipe_stage.v

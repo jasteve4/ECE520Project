@@ -17,7 +17,7 @@ module Cdf_Fetch(
   reg done0, done1;
 
  // assign DataIn = (ReadBus[45:20] == 16'haaaa) ? ReadBus[19:0] : 20'b0;
-  assign ReadAddr = (start) ? ReadAddress : 16'bz;
+  assign ReadAddr =  ReadAddress;
 
   always@(*)
     begin

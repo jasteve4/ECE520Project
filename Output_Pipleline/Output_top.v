@@ -4,7 +4,7 @@ module Output_top(
   input wire          start,
   input wire [19:0]   CdfMin,
   input wire [19:0]   divisor,
-  input wire [127:0]  M2SP_ReadBus,
+  input wire [19:0]  M2SP_ReadBus,
   output wire [15:0]  M2SP_ReadAddress,
   input wire [127:0]  M3SP_ReadBus,
   output wire [15:0]  M3SP_ReadAddress,
