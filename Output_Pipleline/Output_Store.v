@@ -66,35 +66,11 @@ module Output_Store(
           else
             begin
               WriteBus <= 127'b0;
-              next_WriteAddress <= {output_base_offset,15'b0};
+              next_WriteAddress <= 16'b0;
               WriteEnable <= 1'b0;
               short_count <= 4'd15;
             end
         end
     end
 
-/*
-  always@(*)
-    begin
-      for(i = 4'b0; i <= 4'd15; i = i + 4'b1)
-        begin
-          if(i == short_count)
-            begin
-              offset = i << 3;
-              for(j = 3'd0; j <= 3'd7; j = j + 3'd1)
-                begin
-                  data[offset + j] = ResultIn[j];
-                end
-            end
-          else
-            begin
-              offset = i << 3;
-              for(j = 3'd0; j <= 3'd7; j = j + 3'd1)
-                begin
-                  data[offset + j] = data[offset + j];
-                end
-            end
-        end
-    end
-*/
   endmodule

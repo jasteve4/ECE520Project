@@ -28,8 +28,8 @@ module input_pipeline(
 
 
 //=====================NEEDED PARAMETERS=====================
-parameter ADDRESS_OF_LAST = 15'd3;
-//parameter ADDRESS_OF_LAST = 15'd19199;
+//parameter ADDRESS_OF_LAST = 15'd3;
+parameter ADDRESS_OF_LAST = 15'd19199;
 
 //======================PIPELINE STATES======================
 parameter [2:0]

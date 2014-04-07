@@ -46,11 +46,21 @@ module Top_Testbench();
     #10 reset_n = 0;
     #10 reset_n = 1;
     #20 start = 1;
-    #5000000
-    $writememh("./output/outputM1.txt",m1.Register);
-    $writememh("./output/outputM2.txt",m2.Register);
-    $writememh("./output/outputM3.txt",m3.Register);
-    $writememh("./output/outputM4.txt",m4.Register);
+    #1230000
+    $writememh("./output/output0M1.txt",m1.Register);
+    $writememh("./output/output0M2.txt",m2.Register);
+    $writememh("./output/output0M3.txt",m3.Register);
+    $writememh("./output/output0M4.txt",m4.Register);
+    #1230000
+    $writememh("./output/output1M1.txt",m1.Register);
+    $writememh("./output/output1M2.txt",m2.Register);
+    $writememh("./output/output1M3.txt",m3.Register);
+    $writememh("./output/output1M4.txt",m4.Register);
+    #1230000
+    $writememh("./output/output2M1.txt",m1.Register);
+    $writememh("./output/output2M2.txt",m2.Register);
+    $writememh("./output/output2M3.txt",m3.Register);
+    $writememh("./output/output2M4.txt",m4.Register);
     $finish;
   end
 

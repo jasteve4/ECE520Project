@@ -35,7 +35,7 @@ module Output_Fetch_MEM(
           done11 <= 1'd0;
           done <= 1'd0;
         end
-      else
+      else if(start)
         begin
           done1 <= done0;
           done2 <= done1;
@@ -49,6 +49,21 @@ module Output_Fetch_MEM(
           done10 <= done9;
           done11 <= done10;
           done <= done11;
+        end
+      else
+         begin
+          done1 <= 1'd0;
+          done2 <= 1'd0;
+          done3 <= 1'd0;
+          done4 <= 1'd0;
+          done5 <= 1'd0;
+          done6 <= 1'd0;
+          done7 <= 1'd0;
+          done8 <= 1'd0;
+          done9 <= 1'd0;
+          done10 <= 1'd0;
+          done11 <= 1'd0;
+          done <= 1'd0;
         end
     end
 
@@ -64,7 +79,7 @@ module Output_Fetch_MEM(
         end
       else
         begin
-          if((ReadAddress[14:0]) == 15'd19200)
+          if(start & (ReadAddress[14:0]) == 15'd19200)
             begin
               StartOut <= 1'd0;
               ReadAddress <= ReadAddress;

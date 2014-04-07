@@ -35,11 +35,17 @@ module Cdf_Fetch(
           done1 <= 1'd0;
           done <= 1'd0;
         end
-      else
+      else if(start)
         begin
           StoreAddress <= ReadAddress;
           done1 <= done0;
           done <= done1;
+        end
+      else
+        begin
+          StoreAddress <= 16'b0;
+          done1 <= 1'd0;
+          done <= 1'd0;
         end
     end
 
