@@ -1,0 +1,50 @@
+Information: Updating design information... (UID-85)
+Warning: Design 'Top' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay min
+        -max_paths 1
+Design : Top
+Version: H-2013.03-SP2
+Date   : Sun Apr  6 22:52:17 2014
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: fast   Library: NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm
+Wire Load Model Mode: top
+
+  Startpoint: dut_output_top/stage1/StartOut_reg
+              (rising edge-triggered flip-flop clocked by clock)
+  Endpoint: dut_output_top/stage2/StartOut_reg
+            (rising edge-triggered flip-flop clocked by clock)
+  Path Group: clock
+  Path Type: min
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clock (rise edge)                               0.0000     0.0000
+  clock network delay (ideal)                           0.0000     0.0000
+  dut_output_top/stage1/StartOut_reg/CK (SDFFR_X2)      0.0000 #   0.0000 r
+  dut_output_top/stage1/StartOut_reg/Q (SDFFR_X2)       0.0677     0.0677 f
+  dut_output_top/stage1/StartOut (Output_Fetch_MEM)     0.0000     0.0677 f
+  dut_output_top/stage2/StartIn (Output_Fetch_Cdf)      0.0000     0.0677 f
+  dut_output_top/stage2/StartOut_reg/D (DFFR_X1)        0.0000     0.0677 f
+  data arrival time                                                0.0677
+
+  clock clock (rise edge)                               0.0000     0.0000
+  clock network delay (ideal)                           0.0000     0.0000
+  clock uncertainty                                     0.0500     0.0500
+  dut_output_top/stage2/StartOut_reg/CK (DFFR_X1)       0.0000     0.0500 r
+  library hold time                                     0.0020     0.0520
+  data required time                                               0.0520
+  --------------------------------------------------------------------------
+  data required time                                               0.0520
+  data arrival time                                               -0.0677
+  --------------------------------------------------------------------------
+  slack (MET)                                                      0.0158
+
+
+1

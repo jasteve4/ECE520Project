@@ -13,4 +13,5 @@ set type tut1
 #set the number of digits to be used for delay results
 set report_default_significant_digits 4
 
-set CLK_PER 4.4
+set CLK_PER 5
+
