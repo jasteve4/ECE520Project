@@ -8,6 +8,7 @@
 \usepackage{graphicx}
 \usepackage{mdframed}
 \usepackage{multicol}
+\usepackage{listings}
 
 \title{ECE 520 Final Project}
 \author{Christopher Johnson, Joshua Stevens}
@@ -82,7 +83,7 @@ ${}$\hspace{5em}Output Pipeline/CDF, Testbench, Top, Report\\
 
 \section{Introduction}
 
-When using a video capturing device, it can be quite common to achieve footage with poor pixel contrast. This is something that can be solved relatively easily using a software histogram equalizer, however; this software is generally quite slower than the image capture hardware of the camera thus creating a bottleneck. To alleviate this bottleneck, we have created a hardware histogram equalizer. Our design is heavily pipelined allowing the clock speed to be quite low and enabling multiple images to be processed at a time. The result is a hardware module that can process video at 793 fps with an area of 11929.3 $m^{2}$. This is significant because this is much smaller and faster than a comparative software/hardware combination while performing the same function.
+When using a video capturing device, it can be quite common to achieve footage with poor pixel contrast. This is something that can be solved relatively easily using a software histogram equalizer, however; this software is generally quite slower than the image capture hardware of the camera thus creating a bottleneck. To alleviate this bottleneck, we have created a hardware histogram equalizer. Our design is heavily pipelined allowing the clock speed to be fast and enabling multiple images to be processed at a time. The result is a hardware module that can process video at 793 fps with an area of 11929.3 $m^{2}$. This is significant because this is much smaller and faster than a comparative software/hardware combination while performing the same function.
  
 
 \section{Micro-Architecture}
@@ -116,5 +117,18 @@ Our design ran optimally with a clock speed of 4.1 ns and an area of 11,929.3 um
 \section{Conclusion}
 Pipelining partnered with shift dividers and multipliers was very effective in creating fast and space efficient histogram equalizer. For further improvements it would be possible to design our own adder module specific to this application but this would only produce a small increase in performance.
 
-\end{document}
+\newpage
 
+\twocolumn[{
+\section{Included Files}
+\begin{center}
+    \begin{tabular}{ | l | p{5cm} |}
+    	\hline
+    	\textbf{File} & \textbf{Purpose} \\
+    	
+    	\hline
+    \end{tabular}
+\end{center}
+}]
+
+\end{document}
