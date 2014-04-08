@@ -1557,10 +1557,7 @@ MODULE: Top_Testbench
 
 This module is the testbench for our design.
 ========================================*/
-//synopsys off
 module Top_Testbench();
-
-
   reg clock = 1;
   reg reset_n = 1;
   reg start = 0;
@@ -1734,4 +1731,3 @@ always@(*)
     ReadBus2  =  Register[ReadAddress2]; 
   end
 endmodule
-//synopsys on
