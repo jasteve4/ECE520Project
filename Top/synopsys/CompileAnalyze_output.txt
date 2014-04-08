@@ -1,0 +1,35 @@
+Error: Could not read the following target libraries:
+NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db 
+ (UIO-3)
+Error: Design 'input_pipeline' has not been mapped yet
+	and you can only write it out in db format. (UI-53)
+Error: Write command failed. (UID-25)
+Warning: Can't read link_library file 'NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db'. (UID-3)
+Error: Could not read the following target libraries:
+NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm.db 
+ (UIO-3)
+Error: Could not read the following target libraries:
+NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm.db 
+ (UIO-3)
+Information: Annotated 'cell' delays are assumed to include load delay. (UID-282)
+Error: You cannot perform the command 'write_timing' on design 'Top'
+	because it contains the limited design 'input_pipeline'. (UID-337)
+Warning: Can't read link_library file 'NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db'. (UID-3)
+Error: Could not read the following target libraries:
+NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db 
+ (UIO-3)
+Warning: Can't read link_library file 'NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm.db'. (UID-3)
+Error: Could not read the following target libraries:
+NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm.db 
+ (UIO-3)
+Warning: Can't read link_library file 'NangateOpenCellLibrary_PDKv1_2_v2008_10_typical_nldm.db'. (UID-3)
+Error: Could not read the following target libraries:
+NangateOpenCellLibrary_PDKv1_2_v2008_10_typical_nldm.db 
+ (UIO-3)
+Error: Design 'input_pipeline' has not been mapped yet
+	and you can only write it out in db format. (UI-53)
+Error: Write command failed. (UID-25)
+Information: Annotated 'cell' delays are assumed to include load delay. (UID-282)
+Error: You cannot perform the command 'write_timing' on design 'Top'
+	because it contains the limited design 'input_pipeline'. (UID-337)
+0
