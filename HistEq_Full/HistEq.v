@@ -1599,12 +1599,12 @@ module Top_Testbench();
   always #2 clock = ~clock;
 
   initial begin
-    $readmemh("input_small_hex.txt",m1.Register);
+    //$readmemh("input_small_hex.txt",m1.Register);
     #10 reset_n = 0;
     #10 reset_n = 1;
     #20 start = 1;
     #1230000
-    $writememh("./output/output0M1.txt",m1.Register);
+    /*$writememh("./output/output0M1.txt",m1.Register);
     $writememh("./output/output0M2.txt",m2.Register);
     $writememh("./output/output0M3.txt",m3.Register);
     $writememh("./output/output0M4.txt",m4.Register);
@@ -1618,8 +1618,35 @@ module Top_Testbench();
     $writememh("./output/output2M2.txt",m2.Register);
     $writememh("./output/output2M3.txt",m3.Register);
     $writememh("./output/output2M4.txt",m4.Register);
+    */
+    #1230000
+    #1230000
     $finish;
   end
+  
+  always@(dut_Top.input_done or rst_n) begin
+    if(dut_Top.input_done | !rst_n) begin
+      case(state) begin
+        0: begin
+          $readmemh("./input/input_small_hex.txt");
+        end
+        1: begin
+          $readmemh("./input/input_small_hex.txt");
+        end
+        2: begin
+          $readmemh("./input/input_small_hex.txt");
+        end
+        3: begin
+          $readmemh("./input/input_small_hex.txt");
+        end
+      endcase
+    end
+  end
+
+  always@(dut_Top.output_done)begin
+    $writememh("./output/output%d",output_count);
+    output_count = output_count + 1;
+  end 
 
   sram_2R1W m1 (
     .clock(clock), 
