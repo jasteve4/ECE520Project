@@ -43,17 +43,17 @@ ${}$\hspace{5em}Output Pipeline/CDF, Testbench, Top, Report\\
 	\begin{mdframed}
 		\textbf{Delay (ns to run ex)} \\
 		Clock period: 4.1 ns \\
-		Cycles: 307466\\
+		Cycles: 307,215\\
 	\end{mdframed}
 
 	\begin{mdframed}
 		\textbf{Area: ($\mathbf{um^{2}}$)}\\ \\
-		Logic: 11928.30198 \\\\
+		Logic: 11,929.302 \\\\
 		Memory: N/A\\
 	\end{mdframed}
 		
 	\begin{mdframed}
-		\textbf{(delay.area)(ns-1.um-2):} \\\\66.497E-12\\\\
+		\textbf{1/(delay.area)(ns-1.um-2):} \\\\66.5516E-12\\\\
 	\end{mdframed}
 
 \end{multicols}
@@ -78,7 +78,7 @@ ${}$\hspace{5em}Output Pipeline/CDF, Testbench, Top, Report\\
 }]
 %%%%%%%%%%%%%%%%%%%%%%%%%%  END 2 columns
 
-\textbf{\emph{Abstract} - This paper describes a hardware design responsible for improving the contrast of individual frames of a video capture device. The algorithm is based on a histogram equalizer and the hardware is heavily pipelined in order to allow a low clock speed and the ability to quickly process individual images. Using Synopsys Design Vision and Mentor Graphics ModelSim, we prove that with this chip, it is possible to process video at 793 fps with an area of 11929.3 $\mathbf{\boldsymbol\mu m^{2}}$.}
+\textbf{\emph{Abstract} - This paper describes a hardware design responsible for improving the contrast of individual frames of a video capture device. The algorithm is based on a histogram equalizer and the hardware is heavily pipelined in order to allow a fast clock speed and the ability to quickly process individual images. Using Synopsys Design Vision and Mentor Graphics ModelSim, we prove that with this chip, it is possible to process video at 793 fps with an area of 11929.3 $\mathbf{\boldsymbol\mu m^{2}}$.}
  
 
 \section{Introduction}
@@ -102,7 +102,7 @@ This module is responsible for reading pixel values from memory and storing how 
 The sole purpose of this module is to calculate the CDF across all pixel values accumulated in the "Input Pipeline." The results are then loaded into SRAM 2. This pipeline takes the least amount of time to complete, however; it cannot run until "Input Pipeline" is complete and "Output Pipeline" cannot run until the CDF is fully calculated. For this reason, we decided to combine the "CDF Pipeline" module with the "Input Pipeline" in our overall system.
 
 \subsection*{Output Pipeline}
-"Output Pipeline" is the most process intensive module. This module requires a multiplier, a divider, and an adder to operate. In order to optimize these calculations, we chose to use pipelined binary shift multipliers and dividers. We found this to be a very effective method for calculations while providing us a lot of control over the number of pipeline stages we used. The ability to adjust the number of pipeline stages was especially helpful in making sure the "Input/CDF Pipeline" and "Output Pipeline" ran for approximately the same number of cycles. In addition to allowing us to adjust the pipeline stages, creating our own dividers and multipliers allowed us to limit the number of bits required for the quotient to meet our specific application. Adjusting these bit helped to reduce both timing and area. Finally, we chose to use the Synopsys DesignWare adder as opposed to using the '+' operator. After adding the DesignWare module, our maximum clock speed changed from approximately 10 ns to our current 4.1 ns.
+"Output Pipeline" is the most process intensive module. This module requires a multiplier, a divider, and an adder to operate. In order to optimize these calculations, we chose to use pipelined binary shift multiplier and and a pipelined sequential restoring divider. We found this to be a very effective method for calculations while providing us a lot of control over the number of pipeline stages we used. The ability to adjust the number of pipeline stages was especially helpful in making sure the "Input/CDF Pipeline" and "Output Pipeline" ran for approximately the same number of cycles. In addition to allowing us to adjust the pipeline stages, creating our own dividers and multipliers allowed us to limit the number of bits required for the quotient to meet our specific application. Adjusting these bit helped to reduce both timing and area. Finally, we chose to use the Synopsys DesignWare adder as opposed to using the '+' operator. After adding the DesignWare module, our maximum clock speed changed from approximately 10 ns to our current 4.1 ns.
  
 
 \subsection*{Controller}
@@ -118,15 +118,25 @@ Our design ran optimally with a clock speed of 4.1 ns and an area of 11,929.3 um
 Pipelining partnered with shift dividers and multipliers was very effective in creating fast and space efficient histogram equalizer. For further improvements it would be possible to design our own adder module specific to this application but this would only produce a small increase in performance.
 
 \newpage
-
 \twocolumn[{
 \section{Included Files}
 \begin{center}
-    \begin{tabular}{ | l | p{5cm} |}
+    \begin{tabular}{ | l | p{10cm} |}
     	\hline
-    	\textbf{File} & \textbf{Purpose} \\
+    	\textbf{File} & \textbf{Purpose} \\ \hline
+    	README.txt & contains clock name and top module name \\ \hline
+    	HistEq.v & Contains all verilog modules required for synthesis\\ \hline
+    	HistEq\_tb.v & Contains Testbench and SRAM modules\\ \hline
+    	setup.tcl & Synopsys TCL file for configuring clock \\ \hline
+    	read.tcl & Synopsys TCL File \\ \hline
+    	Constraints.tcl & configures constraints required for synthesis \\ \hline
+    	CompileAnalyze.tcl & Compiles for synthesis and outputs synthesis results \\ \hline
+    	command.log & shows all commands run for synthesis\\ \hline
+    	timing\_max\_slow.rpt & used to verify slow timing is met\\ \hline
+    	timing\_min\_fast\_holdcheck\_tut1.rpt & checks that hold time is met when running fast\\ \hline
+    	timing\_max\_slow\_holdfixed\_tut1.rpt & checks timing is met when running slow\\ \hline
+    	cell\_report\_final.rpt & reports size of full area\\ \hline
     	
-    	\hline
     \end{tabular}
 \end{center}
 }]
