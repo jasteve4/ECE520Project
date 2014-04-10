@@ -1,1 +1,1 @@
-../Hex_Files/input_small_hex_2.txt
+../../Hex_Files/input_small_hex_2.txt
