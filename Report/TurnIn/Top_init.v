@@ -1,1 +1,0 @@
-../../HistEq_Full/synopsys/Top_init.v
