@@ -1,0 +1,1 @@
+../../HistEq_Full/synopsys/CompileAnalyze.tcl
