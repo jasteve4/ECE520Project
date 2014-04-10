@@ -1,0 +1,332 @@
+Loading db file '/afs/eos.ncsu.edu/lockers/research/ece/wdavis/tech/nangate/NangateOpenCellLibrary_PDKv1_2_v2008_10/liberty/520/NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db'
+Loading db file '/ncsu/synopsys2013/syn/libraries/syn/dw_foundation.sldb'
+Loading db file '/ncsu/synopsys2013/syn/libraries/syn/gtech.db'
+Loading db file '/ncsu/synopsys2013/syn/libraries/syn/standard.sldb'
+  Loading link library 'NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm'
+  Loading link library 'gtech'
+Loading verilog file '/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'
+Detecting input file type automatically (-rtl or -netlist).
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Compiling source file /afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v
+
+Statistics for case statements in always block at line 157 in file
+	'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           169            |     no/auto      |
+|           210            |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine Controllor line 144 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    cdf_min1_reg     | Flip-flop |  20   |  Y  | N  | N  | N  | N  | N  | N  |
+|    cdf_min0_reg     | Flip-flop |  20   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Controllor line 157 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+==================================================================================
+|     Register Name      |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+==================================================================================
+|       State_reg        | Flip-flop |   2   |  Y  | N  | Y  | N  | N  | N  | N  |
+| output_base_offset_reg | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|    output_start_reg    | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|    input_start_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|    RepeatState_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+| input_base_offset_reg  | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+==================================================================================
+
+Inferred memory devices in process
+	in routine input_pipeline line 382 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|   input_done_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|      m2WE_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   m2WriteAddr_reg   | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|   m2WriteBus_reg    | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+|      m3WE_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   m3WriteAddr_reg   | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|   m3WriteBus_reg    | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine input_pipeline line 395 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+=================================================================================
+|     Register Name     |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+=================================================================================
+|      done_FS_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+| readInitial_Accum_reg | Flip-flop |  15   |  Y  | N  | Y  | N  | N  | N  | N  |
+|   scratchVal_FS_reg   | Flip-flop |   8   |  Y  | N  | N  | Y  | N  | N  | N  |
+|   scratchVal_FS_reg   | Flip-flop |  28   |  Y  | N  | Y  | N  | N  | N  | N  |
+|    m2WE_Accum_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      m2WE_FS_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|  readInitial_FS_reg   | Flip-flop |  15   |  Y  | N  | Y  | N  | N  | N  | N  |
+|      m2WE_FI_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done_FI_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|  readInitial_FI_reg   | Flip-flop |  15   |  Y  | N  | Y  | N  | N  | N  | N  |
+| scratchVal_Accum_reg  | Flip-flop |   8   |  Y  | N  | N  | Y  | N  | N  | N  |
+| scratchVal_Accum_reg  | Flip-flop |  28   |  Y  | N  | Y  | N  | N  | N  | N  |
+|    done_Accum_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+=================================================================================
+
+Inferred memory devices in process
+	in routine input_pipeline line 458 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|   done_enable_reg   | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+| pipelineCounter_reg | Flip-flop |   7   |  Y  | N  | Y  | N  | N  | N  | N  |
+|  write_enable_reg   | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|  memoryCounter_reg  | Flip-flop |  16   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Cdf_Fetch line 600 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|  StoreAddress_reg   | Flip-flop |  16   |  Y  | N  | Y  | N  | N  | N  | N  |
+|      done_reg       | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done1_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Cdf_Fetch line 622 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|   ReadAddress_reg   | Flip-flop |  16   |  Y  | N  | Y  | N  | N  | N  | N  |
+|      count_reg      | Flip-flop |   9   |  Y  | N  | Y  | N  | N  | N  | N  |
+|    StartOut_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|  AccumlateOut_reg   | Flip-flop |  20   |  Y  | N  | Y  | N  | N  | N  | N  |
+|      done0_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Cdf_Accumlate line 685 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    StartOut_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Cdf_Accumlate line 702 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+| StoreAddressOut_reg | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Cdf_Accumlate line 707 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    CdfValid_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|     CdfMin_reg      | Flip-flop |  20   |  Y  | N  | Y  | N  | N  | N  | N  |
+| AccumlateResult_reg | Flip-flop |  20   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Cdf_Store line 770 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    WriteBus_reg     | Flip-flop |  128  |  Y  | N  | Y  | N  | N  | N  | N  |
+|  WriteAddress_reg   | Flip-flop |  16   |  Y  | N  | Y  | N  | N  | N  | N  |
+|   WriteEnable_reg   | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine divider_pipe_stage line 962 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    start_out_reg    | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      q_out_reg      | Flip-flop |   8   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     result_reg      | Flip-flop |  28   |  Y  | N  | Y  | N  | N  | N  | N  |
+|   divisor_out_reg   | Flip-flop |  20   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine end_pipe_stage line 1026 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    start_out_reg    | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      q_out_reg      | Flip-flop |   8   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Output_Fetch_Cdf line 1157 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|     DataOut_reg     | Flip-flop |  20   |  Y  | N  | N  | N  | N  | N  | N  |
+|    StartOut_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Statistics for case statements in always block at line 1304 in file
+	'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           1306           |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine Output_Fetch_MEM line 1205 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      done3_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done2_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done1_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done_reg       | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|     done11_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|     done10_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done9_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done8_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done7_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done6_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done5_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      done4_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Output_Fetch_MEM line 1254 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      done0_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|     data_in_reg     | Flip-flop |  128  |  Y  | N  | Y  | N  | N  | N  | N  |
+|   ReadAddress_reg   | Flip-flop |  16   |  Y  | N  | Y  | N  | N  | N  | N  |
+|    StartOut_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|   short_count_reg   | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Output_Fetch_MEM line 1301 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|   base_offset_reg   | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Output_TopExpression line 1362 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|     Start0_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      Data_reg       | Flip-flop |  19   |  Y  | N  | Y  | N  | N  | N  | N  |
+|      Data_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Output_TopExpression line 1385 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|   dataBottom_reg    | Flip-flop |  14   |  Y  | N  | Y  | N  | N  | N  | N  |
+|    dataCout_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|     Start1_reg      | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|     dataTop_reg     | Flip-flop |  14   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Output_TopExpression line 1416 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    StartOut_reg     | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|     DataOut_reg     | Flip-flop |  28   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Statistics for case statements in always block at line 1498 in file
+	'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           1511           |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine Output_Store line 1493 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|  WriteAddress_reg   | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine Output_Store line 1498 in file
+		'/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/HistEq.v'.
+=================================================================================
+|     Register Name     |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+=================================================================================
+|    WriteEnable_reg    | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|    short_count_reg    | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|    short_count_reg    | Flip-flop |   4   |  Y  | N  | N  | Y  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   6   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   5   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   2   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   3   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   2   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   5   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   6   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   6   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   3   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   3   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   2   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   6   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   6   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   5   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   2   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   3   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   3   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   5   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   6   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   5   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   5   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |   2   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     WriteBus_reg      | Flip-flop |  21   |  N  | N  | Y  | N  | N  | N  | N  |
+| next_WriteAddress_reg | Flip-flop |  16   |  Y  | N  | Y  | N  | N  | N  | N  |
+=================================================================================
+Presto compilation completed successfully.
+Current design is now '/afs/unity.ncsu.edu/users/c/csjohns3/ECE520Project/HistEq_Full/synopsys/Top.db:Top'
+Loaded 17 designs.
+Current design is 'Top'.
+Top Controllor input_top input_pipeline Cdf_top Cdf_Fetch Cdf_Accumlate Cdf_Store pipeline_divider divider_pipe_stage end_pipe_stage Output_top Output_Fetch_Cdf Output_Fetch_MEM Output_TopExpression Output_Result Output_Store
