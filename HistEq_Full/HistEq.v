@@ -1599,55 +1599,67 @@ module Top_Testbench();
   always #2 clock = ~clock;
 
   initial begin
-    //$readmemh("input_small_hex.txt",m1.Register);
+    $display("readingin picture 1");
+    $readmemh("./input/input_small_hex.txt",m1.Register);
     #10 reset_n = 0;
     #10 reset_n = 1;
     #20 start = 1;
-    #1230000
-    /*$writememh("./output/output0M1.txt",m1.Register);
-    $writememh("./output/output0M2.txt",m2.Register);
-    $writememh("./output/output0M3.txt",m3.Register);
-    $writememh("./output/output0M4.txt",m4.Register);
-    #1230000
-    $writememh("./output/output1M1.txt",m1.Register);
-    $writememh("./output/output1M2.txt",m2.Register);
-    $writememh("./output/output1M3.txt",m3.Register);
-    $writememh("./output/output1M4.txt",m4.Register);
-    #1230000
-    $writememh("./output/output2M1.txt",m1.Register);
-    $writememh("./output/output2M2.txt",m2.Register);
-    $writememh("./output/output2M3.txt",m3.Register);
-    $writememh("./output/output2M4.txt",m4.Register);
-    */
-    #1230000
-    #1230000
+    
+    wait(dut_Top.input_done) begin
+      $display("readingin picture 2");
+      $readmemh("./input/input_small_hex_2.txt",m1.Register);
+    end
+    wait(!dut_Top.input_done) begin
+      $display("picture 1 done");
+    end
+
+    wait(dut_Top.input_done) begin
+      $display("readingin picture 3");
+      $readmemh("./input/input_small_hex.txt",m1.Register);
+      $display("writing picture1");
+      $writememh("./output/picture1/outputM1.txt",m1.Register);
+      $writememh("./output/picture1/outputM2.txt",m2.Register);
+      $writememh("./output/picture1/outputM3.txt",m3.Register);
+      $writememh("./output/picture1/outputM4.txt",m4.Register);
+    end
+    wait(!dut_Top.input_done) begin
+      $display("picture 2 done");
+    end
+    
+    wait(dut_Top.input_done) begin
+      $display("readingin picture 4");
+      $readmemh("./input/input_small_hex_2.txt",m1.Register);
+      $display("writing picture 2");
+      $writememh("./output/picture2/outputM1.txt",m1.Register);
+      $writememh("./output/picture2/outputM2.txt",m2.Register);
+      $writememh("./output/picture2/outputM3.txt",m3.Register);
+      $writememh("./output/picture2/outputM4.txt",m4.Register);
+    end
+    wait(!dut_Top.input_done) begin 
+      $display("picture 3 done");
+    end
+    
+    wait(dut_Top.input_done) begin
+      $display("readingin picture 5");
+      $readmemh("./input/input_small_hex.txt",m1.Register);
+      $display("writing picture 3");
+      $writememh("./output/picture3/outputM1.txt",m1.Register);
+      $writememh("./output/picture3/outputM2.txt",m2.Register);
+      $writememh("./output/picture3/outputM3.txt",m3.Register);
+      $writememh("./output/picture3/outputM4.txt",m4.Register);
+    end
+    wait(dut_Top.output_done) begin
+      $display("picture 4 done");
+      $readmemh("./input/input_small_hex.txt",m1.Register);
+      $display("writing picture 4");
+      $writememh("./output/picture4/outputM1.txt",m1.Register);
+      $writememh("./output/picture4/outputM2.txt",m2.Register);
+      $writememh("./output/picture4/outputM3.txt",m3.Register);
+      $writememh("./output/picture4/outputM4.txt",m4.Register);
+    end
     $finish;
   end
   
-  always@(dut_Top.input_done or rst_n) begin
-    if(dut_Top.input_done | !rst_n) begin
-      case(state) begin
-        0: begin
-          $readmemh("./input/input_small_hex.txt");
-        end
-        1: begin
-          $readmemh("./input/input_small_hex.txt");
-        end
-        2: begin
-          $readmemh("./input/input_small_hex.txt");
-        end
-        3: begin
-          $readmemh("./input/input_small_hex.txt");
-        end
-      endcase
-    end
-  end
-
-  always@(dut_Top.output_done)begin
-    $writememh("./output/output%d",output_count);
-    output_count = output_count + 1;
-  end 
-
   sram_2R1W m1 (
     .clock(clock), 
     .WE(m1_WriteEnable), 
