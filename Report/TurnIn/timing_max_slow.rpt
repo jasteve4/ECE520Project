@@ -1,1 +1,97 @@
-../../HistEq_Full/synopsys/timing_max_slow.rpt
+Information: Updating design information... (UID-85)
+Warning: Design 'Top' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : Top
+Version: H-2013.03-SP2
+Date   : Wed Apr  9 22:42:34 2014
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: slow   Library: NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm
+Wire Load Model Mode: top
+
+  Startpoint: dut_Controller/output_base_offset_reg
+              (rising edge-triggered flip-flop clocked by clock)
+  Endpoint: dut_output_top/stage4/divider/stage0/result_reg[27]
+            (rising edge-triggered flip-flop clocked by clock)
+  Path Group: clock
+  Path Type: max
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clock (rise edge)                               0.0000     0.0000
+  clock network delay (ideal)                           0.0000     0.0000
+  dut_Controller/output_base_offset_reg/CK (DFFR_X2)    0.0000 #   0.0000 r
+  dut_Controller/output_base_offset_reg/QN (DFFR_X2)    0.4898     0.4898 r
+  dut_Controller/U114/ZN (INV_X8)                       0.0628     0.5526 f
+  dut_Controller/U61/ZN (INV_X4)                        0.0697     0.6223 r
+  dut_Controller/U17/Z (MUX2_X2)                        0.8156     1.4379 f
+  dut_Controller/U31/ZN (INV_X4)                        0.0783     1.5161 r
+  dut_Controller/U34/ZN (AND4_X4)                       0.2093     1.7254 r
+  dut_Controller/U172/ZN (NAND2_X2)                     0.0570     1.7823 f
+  dut_Controller/U173/ZN (INV_X4)                       0.0588     1.8411 r
+  dut_Controller/U6/ZN (NAND2_X2)                       0.0523     1.8935 f
+  dut_Controller/U4/ZN (NAND2_X4)                       0.0833     1.9767 r
+  dut_Controller/U8/ZN (NOR2_X2)                        0.0638     2.0406 f
+  dut_Controller/U9/ZN (INV_X4)                         0.0586     2.0992 r
+  dut_Controller/U23/ZN (NAND2_X2)                      0.0423     2.1415 f
+  dut_Controller/U93/ZN (NAND2_X2)                      0.1181     2.2596 r
+  dut_Controller/Divisor[14] (Controllor)               0.0000     2.2596 r
+  dut_output_top/divisor[14] (Output_top)               0.0000     2.2596 r
+  dut_output_top/stage4/Divisor[14] (Output_Result)     0.0000     2.2596 r
+  dut_output_top/stage4/divider/divisor[14] (pipeline_divider)
+                                                        0.0000     2.2596 r
+  dut_output_top/stage4/divider/U10/ZN (INV_X4)         0.0429     2.3025 f
+  dut_output_top/stage4/divider/stage0/divisor[14] (divider_pipe_stage_1)
+                                                        0.0000     2.3025 f
+  dut_output_top/stage4/divider/stage0/stage_add/B[14] (divider_pipe_stage_1_DW01_add_1)
+                                                        0.0000     2.3025 f
+  dut_output_top/stage4/divider/stage0/stage_add/U245/ZN (NAND2_X2)
+                                                        0.0731     2.3755 r
+  dut_output_top/stage4/divider/stage0/stage_add/U266/ZN (NOR2_X2)
+                                                        0.0670     2.4425 f
+  dut_output_top/stage4/divider/stage0/stage_add/U267/ZN (NOR2_X4)
+                                                        0.1016     2.5441 r
+  dut_output_top/stage4/divider/stage0/stage_add/U186/ZN (OAI21_X2)
+                                                        0.0856     2.6297 f
+  dut_output_top/stage4/divider/stage0/stage_add/U29/ZN (AOI21_X4)
+                                                        0.3269     2.9567 r
+  dut_output_top/stage4/divider/stage0/stage_add/U262/ZN (OAI21_X4)
+                                                        0.1063     3.0629 f
+  dut_output_top/stage4/divider/stage0/stage_add/CO (divider_pipe_stage_1_DW01_add_1)
+                                                        0.0000     3.0629 f
+  dut_output_top/stage4/divider/stage0/U8/ZN (NAND2_X2)
+                                                        0.1110     3.1739 r
+  dut_output_top/stage4/divider/stage0/U24/ZN (NAND2_X4)
+                                                        0.0727     3.2465 f
+  dut_output_top/stage4/divider/stage0/U9/ZN (AND2_X2)
+                                                        0.1827     3.4293 f
+  dut_output_top/stage4/divider/stage0/U33/ZN (INV_X4)
+                                                        0.1101     3.5394 r
+  dut_output_top/stage4/divider/stage0/U115/ZN (OAI22_X2)
+                                                        0.0881     3.6275 f
+  dut_output_top/stage4/divider/stage0/result_reg[27]/D (DFFR_X1)
+                                                        0.0000     3.6275 f
+  data arrival time                                                3.6275
+
+  clock clock (rise edge)                               4.1000     4.1000
+  clock network delay (ideal)                           0.0000     4.1000
+  clock uncertainty                                    -0.0500     4.0500
+  dut_output_top/stage4/divider/stage0/result_reg[27]/CK (DFFR_X1)
+                                                        0.0000     4.0500 r
+  library setup time                                   -0.4224     3.6276
+  data required time                                               3.6276
+  --------------------------------------------------------------------------
+  data required time                                               3.6276
+  data arrival time                                               -3.6275
+  --------------------------------------------------------------------------
+  slack (MET)                                                      0.0002
+
+
+1

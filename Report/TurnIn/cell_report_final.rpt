@@ -1,1 +1,27 @@
-../../HistEq_Full/synopsys/cell_report_final.rpt
+ 
+****************************************
+Report : cell
+Design : Top
+Version: H-2013.03-SP2
+Date   : Wed Apr  9 22:42:45 2014
+****************************************
+
+Attributes:
+    b - black box (unknown)
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    u - contains unmapped logic
+
+Cell                      Reference       Library             Area  Attributes
+--------------------------------------------------------------------------------
+U199                      INV_X4          NangateOpenCellLibrary_PDKv1_2_v2008_10_typical_nldm
+                                                            0.5320  
+U200                      INV_X4          NangateOpenCellLibrary_PDKv1_2_v2008_10_typical_nldm
+                                                            0.5320  
+dut_Controller            Controllor                      456.7220  h, n
+dut_output_top            Output_top                      7753.3680 h, n
+top_dut                   input_top                       3718.1480 h, n
+--------------------------------------------------------------------------------
+Total 5 cells                                             11929.3020
+1
